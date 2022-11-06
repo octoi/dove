@@ -1,7 +1,12 @@
 import bcrypt from 'bcrypt';
 import { prismaClient } from './prisma';
-import { UserLoginArgs, UserRegisterArgs } from '@/types/user.type';
+import {
+  UserLoginArgs,
+  UserRegisterArgs,
+  UserUpdateArgs,
+} from '@/types/user.type';
 
+// create new user
 export const registerUser = (data: UserRegisterArgs) => {
   return new Promise(async (resolve, reject) => {
     const hashedPassword = await bcrypt.hash(data.password, 10);
@@ -28,6 +33,7 @@ export const registerUser = (data: UserRegisterArgs) => {
   });
 };
 
+// find user with email & verify password
 export const loginUser = (data: UserLoginArgs) => {
   return new Promise(async (resolve, reject) => {
     const user: any = await findUser({ email: data.email }).catch(reject);
@@ -39,6 +45,37 @@ export const loginUser = (data: UserLoginArgs) => {
       if (!res) return reject('Invalid password');
       resolve(user);
     });
+  });
+};
+
+// update user with given data
+export const updateUser = (data: UserUpdateArgs, userId: number) => {
+  return new Promise(async (resolve, reject) => {
+    const user: any = await findUser({ userId }).catch(reject);
+    if (!user) return;
+
+    // hashing password if user had change the password
+    if (data.newPassword) {
+      data.newPassword = await bcrypt.hash(data.newPassword, 10);
+    }
+
+    // if data.fieldName is empty default value in database is set instead of null
+    let newUserData: UserRegisterArgs = {
+      name: data.newName || user?.name,
+      email: data.newEmail || user?.email,
+      profile: data.newProfile || user?.profile,
+      password: data.newPassword || user?.password,
+    };
+
+    prismaClient.user
+      .update({
+        where: { id: userId },
+        data: newUserData,
+      })
+      .then(resolve)
+      .catch(() => {
+        reject('Failed to update user');
+      });
   });
 };
 
