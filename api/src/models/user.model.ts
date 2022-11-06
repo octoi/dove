@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import { prismaClient } from './prisma';
-import { UserRegisterArgs } from '@/types/user.type';
+import { UserLoginArgs, UserRegisterArgs } from '@/types/user.type';
 
 export const registerUser = (data: UserRegisterArgs) => {
   return new Promise(async (resolve, reject) => {
@@ -25,6 +25,20 @@ export const registerUser = (data: UserRegisterArgs) => {
         }
         reject('Failed to register user');
       });
+  });
+};
+
+export const loginUser = (data: UserLoginArgs) => {
+  return new Promise(async (resolve, reject) => {
+    const user: any = await findUser({ email: data.email }).catch(reject);
+    if (!user) return;
+
+    // comparing hashed passwords
+    bcrypt.compare(data.password, user.password, (err, res) => {
+      if (err) return reject('Failed to validate password');
+      if (!res) return reject('Invalid password');
+      resolve(user);
+    });
   });
 };
 
