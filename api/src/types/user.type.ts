@@ -4,3 +4,8 @@ export type UserRegisterArgs = {
   profile: string;
   password: string;
 };
+
+export type UserLoginArgs = {
+  email: string;
+  password: string;
+};
