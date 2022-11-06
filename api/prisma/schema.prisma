@@ -1,0 +1,70 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int       @id @default(autoincrement())
+  name       String
+  email      String    @unique
+  password   String
+  profile    String
+  bio        String?
+  createdNGO Ngo[]     @relation("createdNGO") // relation of NGOs which is created by user
+  joinedNGO  Ngo[]     @relation("joinedNGO") // relation of joined NGOs
+  adminNGO   Ngo[]     @relation("adminNGO") // relation of NGOs where user is admin
+  Like       Like[]    @relation("likedUser") // relation to like of user
+  Comment    Comment[] @relation("commentedUser") // relation to comments of user
+}
+
+model Ngo {
+  id          String @id @default(uuid())
+  name        String
+  description String
+  profile     String
+  banner      String
+  creatorId   Int
+  creator     User   @relation(name: "createdNGO", fields: [creatorId], references: [id]) // relation to NGO creator
+  Post        Post[] @relation("posts") // relation to created posts
+  members     User[] @relation("joinedNGO") // relation to memebers
+  admins      User[] @relation("adminNGO") // relation to admins
+}
+
+model Post {
+  id        Int       @id @default(autoincrement())
+  text      String
+  media     String?
+  createdAt DateTime  @default(now())
+  ngoId     String
+  ngo       Ngo       @relation(name: "posts", fields: [ngoId], references: [id]) // relation to NGO which post is posted
+  Like      Like[]    @relation("likedPost") // relation to post likes
+  Comment   Comment[] @relation("commentedPost") // relation to post comments
+}
+
+model Like {
+  id     Int  @id @default(autoincrement())
+  userId Int
+  postId Int
+  user   User @relation(name: "likedUser", fields: [userId], references: [id]) // relation to liked user
+  post   Post @relation(name: "likedPost", fields: [postId], references: [id]) // relation to liked post
+}
+
+model Comment {
+  id         Int       @id @default(autoincrement())
+  comment    String
+  userId     Int
+  postId     Int
+  createdAt  DateTime  @default(now())
+  user       User      @relation(name: "commentedUser", fields: [userId], references: [id]) // relation to commented user
+  post       Post      @relation(name: "commentedPost", fields: [postId], references: [id]) // relationt to commented post
+  // don't if this part works
+  replies    Comment[] @relation("replies") // replies of comment
+  replyingTo Comment[] @relation("replies")
+}
