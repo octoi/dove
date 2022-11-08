@@ -4,11 +4,10 @@
   "description": "Backend for dove",
   "main": "src/app.ts",
   "scripts": {
-    "start": "ts-node ./src/app.ts",
+    "start": "ts-node -r tsconfig-paths/register ./src/app.ts",
     "dev": "nodemon --config nodemon.json ./src/app.ts",
-    "build": "tsc -p .",
+    "build": "tsc -p . && resolve-tspaths",
     "js-start": "node ./dist/app.js",
-    "js-dev": "nodemon ./dist/app.js",
     "migrate": "prisma migrate dev --name migration"
   },
   "keywords": [],
@@ -27,6 +26,8 @@
   },
   "dependencies": {
     "@prisma/client": "^4.5.0",
-    "bcrypt": "^5.1.0"
+    "bcrypt": "^5.1.0",
+    "resolve-tspaths": "^0.8.3",
+    "tsconfig-paths": "^4.1.0"
   }
 }
