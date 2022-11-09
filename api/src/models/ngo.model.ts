@@ -16,3 +16,24 @@ export const createNGO = (data: CreateNGOArgs, userId: number) => {
       .catch(reject);
   });
 };
+
+// connect user with NGO
+export const joinNGO = (ngoId: string, userId: number) => {
+  return new Promise((resolve, reject) => {
+    prismaClient.ngo
+      .update({
+        where: {
+          id: ngoId,
+        },
+        data: {
+          members: {
+            connect: {
+              id: userId,
+            },
+          },
+        },
+      })
+      .then(resolve)
+      .catch(reject);
+  });
+};
