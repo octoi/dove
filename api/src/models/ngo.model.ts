@@ -37,3 +37,19 @@ export const joinNGO = (ngoId: string, userId: number) => {
       .catch(reject);
   });
 };
+
+// get list of NGO
+// getting page in order to paginate data
+export const loadNGO = (page: number) => {
+  return new Promise((resolve, reject) => {
+    let skip = (page - 1) * 10;
+
+    prismaClient.ngo
+      .findMany({
+        skip,
+        take: 10,
+      })
+      .then(resolve)
+      .catch(reject);
+  });
+};
