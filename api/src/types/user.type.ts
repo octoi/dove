@@ -12,8 +12,9 @@ export type UserLoginArgs = {
 
 // * all fields starts with `new` will have default data of user if he didn't update any of fields
 export type UserUpdateArgs = {
-  newName?: string;
-  newEmail?: string;
-  newProfile?: string;
-  newPassword?: string;
+  name?: string;
+  email?: string;
+  profile?: string;
+  password?: string;
+  bio?: string;
 };

@@ -55,16 +55,17 @@ export const updateUser = (data: UserUpdateArgs, userId: number) => {
     if (!user) return;
 
     // hashing password if user had change the password
-    if (data.newPassword) {
-      data.newPassword = await bcrypt.hash(data.newPassword, 10);
+    if (data.password) {
+      data.password = await bcrypt.hash(data.password, 10);
     }
 
     // if data.fieldName is empty default value in database is set instead of null
-    let newUserData: UserRegisterArgs = {
-      name: data.newName || user?.name,
-      email: data.newEmail || user?.email,
-      profile: data.newProfile || user?.profile,
-      password: data.newPassword || user?.password,
+    let newUserData = {
+      name: data.name || user?.name,
+      email: data.email || user?.email,
+      profile: data.profile || user?.profile,
+      password: data.password || user?.password,
+      bio: data.bio,
     };
 
     prismaClient.user
