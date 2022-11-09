@@ -63,3 +63,16 @@ export const updateNGO = (ngoId: string, data: UpdateNGOArgs) => {
       .catch(reject);
   });
 };
+
+export const deleteNGO = (ngoId: string) => {
+  return new Promise((resolve, reject) => {
+    prismaClient.ngo
+      .delete({
+        where: {
+          id: ngoId,
+        },
+      })
+      .then(resolve)
+      .catch(reject);
+  });
+};
