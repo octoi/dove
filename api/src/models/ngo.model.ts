@@ -15,27 +15,6 @@ export const createNGO = (data: CreateNGOArgs, userId: number) => {
   });
 };
 
-// connect user with NGO
-export const joinNGO = (ngoId: string, userId: number) => {
-  return new Promise((resolve, reject) => {
-    prismaClient.ngo
-      .update({
-        where: {
-          id: ngoId,
-        },
-        data: {
-          members: {
-            connect: {
-              id: userId,
-            },
-          },
-        },
-      })
-      .then(resolve)
-      .catch(reject);
-  });
-};
-
 export const loadNGO = (page: number) => {
   return new Promise((resolve, reject) => {
     let skip = (page - 1) * 10;
@@ -70,6 +49,113 @@ export const deleteNGO = (ngoId: string) => {
       .delete({
         where: {
           id: ngoId,
+        },
+      })
+      .then(resolve)
+      .catch(reject);
+  });
+};
+
+// get NGO details with joined members and admins
+export const getNGODetails = (ngoId: string) => {
+  return new Promise((resolve, reject) => {
+    prismaClient.ngo
+      .findUnique({
+        where: {
+          id: ngoId,
+        },
+        select: {
+          admins: true,
+          members: true,
+          _count: {
+            select: {
+              members: true,
+            },
+          },
+        },
+      })
+      .then(resolve)
+      .catch(reject);
+  });
+};
+
+// connect user with NGO
+export const joinNGO = (ngoId: string, userId: number) => {
+  return new Promise((resolve, reject) => {
+    prismaClient.ngo
+      .update({
+        where: {
+          id: ngoId,
+        },
+        data: {
+          members: {
+            connect: {
+              id: userId,
+            },
+          },
+        },
+      })
+      .then(resolve)
+      .catch(reject);
+  });
+};
+
+// connect user to ngo admins
+export const makeNGOAdmin = (ngoId: string, userId: number) => {
+  return new Promise((resolve, reject) => {
+    prismaClient.ngo
+      .update({
+        where: {
+          id: ngoId,
+        },
+        data: {
+          admins: {
+            connect: {
+              id: userId,
+            },
+          },
+        },
+      })
+      .then(resolve)
+      .catch(reject);
+  });
+};
+
+// disconnect user from admins
+export const removeNGOAdmin = (ngoId: string, userId: number) => {
+  return new Promise((resolve, reject) => {
+    prismaClient.ngo
+      .update({
+        where: {
+          id: ngoId,
+        },
+        data: {
+          admins: {
+            disconnect: {
+              id: userId,
+            },
+          },
+        },
+      })
+      .then(resolve)
+      .catch(reject);
+  });
+};
+
+// disconnect member from members
+export const removeMember = (ngoId: string, userId: number) => {
+  return new Promise((resolve, reject) => {
+    prismaClient.ngo
+      .update({
+        where: {
+          id: ngoId,
+        },
+        data: {
+          members: {
+            disconnect: {
+              id: userId,
+            },
+          },
         },
       })
       .then(resolve)
