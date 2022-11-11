@@ -141,3 +141,24 @@ export const removeNGOAdmin = (ngoId: string, userId: number) => {
       .catch(reject);
   });
 };
+
+// disconnect member from members
+export const removeMember = (ngoId: string, userId: number) => {
+  return new Promise((resolve, reject) => {
+    prismaClient.ngo
+      .update({
+        where: {
+          id: ngoId,
+        },
+        data: {
+          members: {
+            disconnect: {
+              id: userId,
+            },
+          },
+        },
+      })
+      .then(resolve)
+      .catch(reject);
+  });
+};
