@@ -99,3 +99,24 @@ export const joinNGO = (ngoId: string, userId: number) => {
       .catch(reject);
   });
 };
+
+// connect user to ngo admins
+export const makeNGOAdmin = (ngoId: string, userId: number) => {
+  return new Promise((resolve, reject) => {
+    prismaClient.ngo
+      .update({
+        where: {
+          id: ngoId,
+        },
+        data: {
+          admins: {
+            connect: {
+              id: userId,
+            },
+          },
+        },
+      })
+      .then(resolve)
+      .catch(reject);
+  });
+};
