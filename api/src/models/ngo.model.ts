@@ -120,3 +120,24 @@ export const makeNGOAdmin = (ngoId: string, userId: number) => {
       .catch(reject);
   });
 };
+
+// disconnect user from admins
+export const removeNGOAdmin = (ngoId: string, userId: number) => {
+  return new Promise((resolve, reject) => {
+    prismaClient.ngo
+      .update({
+        where: {
+          id: ngoId,
+        },
+        data: {
+          admins: {
+            disconnect: {
+              id: userId,
+            },
+          },
+        },
+      })
+      .then(resolve)
+      .catch(reject);
+  });
+};
