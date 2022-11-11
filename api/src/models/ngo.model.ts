@@ -50,6 +50,29 @@ export const loadNGO = (page: number) => {
   });
 };
 
+// get NGO details with joined members and admins
+export const getNGODetails = (ngoId: string) => {
+  return new Promise((resolve, reject) => {
+    prismaClient.ngo
+      .findUnique({
+        where: {
+          id: ngoId,
+        },
+        select: {
+          admins: true,
+          members: true,
+          _count: {
+            select: {
+              members: true,
+            },
+          },
+        },
+      })
+      .then(resolve)
+      .catch(reject);
+  });
+};
+
 export const updateNGO = (ngoId: string, data: UpdateNGOArgs) => {
   return new Promise((resolve, reject) => {
     prismaClient.ngo
