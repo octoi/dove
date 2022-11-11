@@ -15,27 +15,6 @@ export const createNGO = (data: CreateNGOArgs, userId: number) => {
   });
 };
 
-// connect user with NGO
-export const joinNGO = (ngoId: string, userId: number) => {
-  return new Promise((resolve, reject) => {
-    prismaClient.ngo
-      .update({
-        where: {
-          id: ngoId,
-        },
-        data: {
-          members: {
-            connect: {
-              id: userId,
-            },
-          },
-        },
-      })
-      .then(resolve)
-      .catch(reject);
-  });
-};
-
 export const loadNGO = (page: number) => {
   return new Promise((resolve, reject) => {
     let skip = (page - 1) * 10;
@@ -44,6 +23,33 @@ export const loadNGO = (page: number) => {
       .findMany({
         skip,
         take: 10,
+      })
+      .then(resolve)
+      .catch(reject);
+  });
+};
+
+export const updateNGO = (ngoId: string, data: UpdateNGOArgs) => {
+  return new Promise((resolve, reject) => {
+    prismaClient.ngo
+      .update({
+        where: {
+          id: ngoId,
+        },
+        data,
+      })
+      .then(resolve)
+      .catch(reject);
+  });
+};
+
+export const deleteNGO = (ngoId: string) => {
+  return new Promise((resolve, reject) => {
+    prismaClient.ngo
+      .delete({
+        where: {
+          id: ngoId,
+        },
       })
       .then(resolve)
       .catch(reject);
@@ -73,26 +79,20 @@ export const getNGODetails = (ngoId: string) => {
   });
 };
 
-export const updateNGO = (ngoId: string, data: UpdateNGOArgs) => {
+// connect user with NGO
+export const joinNGO = (ngoId: string, userId: number) => {
   return new Promise((resolve, reject) => {
     prismaClient.ngo
       .update({
         where: {
           id: ngoId,
         },
-        data,
-      })
-      .then(resolve)
-      .catch(reject);
-  });
-};
-
-export const deleteNGO = (ngoId: string) => {
-  return new Promise((resolve, reject) => {
-    prismaClient.ngo
-      .delete({
-        where: {
-          id: ngoId,
+        data: {
+          members: {
+            connect: {
+              id: userId,
+            },
+          },
         },
       })
       .then(resolve)
