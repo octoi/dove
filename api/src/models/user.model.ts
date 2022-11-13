@@ -116,3 +116,20 @@ export const findUser = ({
       });
   });
 };
+
+// Get user NGOs
+export const getUserNGOs = (userId: number) => {
+  return new Promise((resolve, reject) => {
+    prismaClient.user
+      .findUnique({
+        where: {
+          id: userId,
+        },
+        include: {
+          joinedNGO: true,
+        },
+      })
+      .then(resolve)
+      .catch(reject);
+  });
+};
