@@ -74,19 +74,10 @@ export const getNGODetails = (ngoId: string) => {
         where: {
           id: ngoId,
         },
-        select: {
-          id: true,
-          name: true,
-          description: true,
-          banner: true,
-          profile: true,
+        include: {
+          _count: true,
           admins: true,
           members: true,
-          _count: {
-            select: {
-              members: true,
-            },
-          },
         },
       })
       .then(resolve)
@@ -168,6 +159,25 @@ export const removeMember = (ngoId: string, userId: number) => {
         data: {
           members: {
             disconnect: {
+              id: userId,
+            },
+          },
+        },
+      })
+      .then(resolve)
+      .catch(reject);
+  });
+};
+
+// returns ngo details if provided user is admin of give NGO
+export const authenticateNGOAdmin = (userId: number, ngoId: string) => {
+  return new Promise((resolve, reject) => {
+    prismaClient.ngo
+      .findFirst({
+        where: {
+          id: ngoId,
+          admins: {
+            every: {
               id: userId,
             },
           },
