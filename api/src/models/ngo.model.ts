@@ -74,19 +74,10 @@ export const getNGODetails = (ngoId: string) => {
         where: {
           id: ngoId,
         },
-        select: {
-          id: true,
-          name: true,
-          description: true,
-          banner: true,
-          profile: true,
+        include: {
+          _count: true,
           admins: true,
           members: true,
-          _count: {
-            select: {
-              members: true,
-            },
-          },
         },
       })
       .then(resolve)
