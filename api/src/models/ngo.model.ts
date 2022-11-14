@@ -75,6 +75,11 @@ export const getNGODetails = (ngoId: string) => {
           id: ngoId,
         },
         select: {
+          id: true,
+          name: true,
+          description: true,
+          banner: true,
+          profile: true,
           admins: true,
           members: true,
           _count: {
