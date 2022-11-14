@@ -168,3 +168,22 @@ export const removeMember = (ngoId: string, userId: number) => {
       .catch(reject);
   });
 };
+
+// returns ngo details if provided user is admin of give NGO
+export const authenticateNGOAdmin = (userId: number, ngoId: string) => {
+  return new Promise((resolve, reject) => {
+    prismaClient.ngo
+      .findFirst({
+        where: {
+          id: ngoId,
+          admins: {
+            every: {
+              id: userId,
+            },
+          },
+        },
+      })
+      .then(resolve)
+      .catch(reject);
+  });
+};
