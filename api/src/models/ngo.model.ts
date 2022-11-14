@@ -1,13 +1,23 @@
 import { prismaClient } from './prisma';
 import { CreateNGOArgs, UpdateNGOArgs } from '@/types/ngo.type';
 
-export const createNGO = (data: CreateNGOArgs, userId: number) => {
+export const createNGO = (userId: number, data: CreateNGOArgs) => {
   return new Promise((resolve, reject) => {
     prismaClient.ngo
       .create({
         data: {
           ...data,
           creatorId: userId,
+          members: {
+            connect: {
+              id: userId,
+            },
+          },
+          admins: {
+            connect: {
+              id: userId,
+            },
+          },
         },
       })
       .then(resolve)
