@@ -56,3 +56,22 @@ export const loadUserFeed = (userId: number, page: number) => {
     });
   });
 };
+
+export const getPost = (postId: number) => {
+  return new Promise((resolve, reject) => {
+    prismaClient.post
+      .findUnique({
+        where: {
+          id: postId,
+        },
+        include: {
+          _count: true,
+          Comment: true,
+          Like: true,
+          ngo: true,
+        },
+      })
+      .then(resolve)
+      .catch(reject);
+  });
+};
