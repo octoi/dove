@@ -13,7 +13,6 @@ export const createPost = (data: CreatePostArgs) => {
   });
 };
 
-// TODO: add authentication
 export const deletePost = (postId: number) => {
   return new Promise((resolve, reject) => {
     prismaClient.post
