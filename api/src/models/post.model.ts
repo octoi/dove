@@ -13,7 +13,6 @@ export const createPost = (data: CreatePostArgs) => {
   });
 };
 
-// TODO: add authentication
 export const deletePost = (postId: number) => {
   return new Promise((resolve, reject) => {
     prismaClient.post
@@ -46,7 +45,7 @@ export const loadUserFeed = (userId: number, page: number) => {
             },
           },
           orderBy: {
-            createdAt: 'asc',
+            createdAt: 'desc',
           },
           skip,
           take: 10,
