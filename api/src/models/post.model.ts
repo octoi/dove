@@ -46,7 +46,7 @@ export const loadUserFeed = (userId: number, page: number) => {
             },
           },
           orderBy: {
-            createdAt: 'asc',
+            createdAt: 'desc',
           },
           skip,
           take: 10,
