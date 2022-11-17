@@ -43,7 +43,7 @@ model Post {
   media     String?
   createdAt DateTime  @default(now())
   ngoId     String
-  ngo       Ngo       @relation(name: "posts", fields: [ngoId], references: [id]) // relation to NGO which post is posted
+  ngo       Ngo       @relation(name: "posts", fields: [ngoId], references: [id], onDelete: Cascade) // relation to NGO which post is posted
   Like      Like[]    @relation("likedPost") // relation to post likes
   Comment   Comment[] @relation("commentedPost") // relation to post comments
 }
@@ -53,7 +53,7 @@ model Like {
   userId Int
   postId Int
   user   User @relation(name: "likedUser", fields: [userId], references: [id]) // relation to liked user
-  post   Post @relation(name: "likedPost", fields: [postId], references: [id]) // relation to liked post
+  post   Post @relation(name: "likedPost", fields: [postId], references: [id], onDelete: Cascade) // relation to liked post
 
   @@unique([userId, postId])
 }
@@ -65,7 +65,7 @@ model Comment {
   postId     Int
   createdAt  DateTime  @default(now())
   user       User      @relation(name: "commentedUser", fields: [userId], references: [id]) // relation to commented user
-  post       Post      @relation(name: "commentedPost", fields: [postId], references: [id]) // relationt to commented post
+  post       Post      @relation(name: "commentedPost", fields: [postId], references: [id], onDelete: Cascade) // relationt to commented post
   // don't if this part works
   replies    Comment[] @relation("replies") // replies of comment
   replyingTo Comment[] @relation("replies")
