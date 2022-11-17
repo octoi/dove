@@ -54,6 +54,8 @@ model Like {
   postId Int
   user   User @relation(name: "likedUser", fields: [userId], references: [id]) // relation to liked user
   post   Post @relation(name: "likedPost", fields: [postId], references: [id]) // relation to liked post
+
+  @@unique([userId, postId])
 }
 
 model Comment {
