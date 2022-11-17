@@ -47,6 +47,16 @@ export const loadUserFeed = (userId: number, page: number) => {
           orderBy: {
             createdAt: 'desc',
           },
+          include: {
+            _count: true,
+            ngo: true,
+            // selecting like by user
+            Like: {
+              where: {
+                userId,
+              },
+            },
+          },
           skip,
           take: 10,
         })
