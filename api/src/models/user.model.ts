@@ -19,7 +19,7 @@ export const registerUser = (data: UserRegisterArgs) => {
         },
       })
       .then(resolve)
-      .catch((err: { code: String }) => {
+      .catch((err: { code: string }) => {
         /* 
           https://www.prisma.io/docs/reference/api-reference/error-reference
           error `P2002` = "Unique constraint failed on the {constraint}" 
