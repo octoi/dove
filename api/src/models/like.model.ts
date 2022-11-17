@@ -10,7 +10,20 @@ export const createLike = (userId: number, postId: number) => {
         },
       })
       .then(resolve)
-      .catch(reject);
+      .catch((err: { code: string }) => {
+        /* 
+          https://www.prisma.io/docs/reference/api-reference/error-reference
+          error `P2002` = "Unique constraint failed on the {constraint}" 
+          user is trying to like same post
+        */
+
+        if (err.code === 'P2002') {
+          // simply exiting because we don't need to handle this situation
+          return;
+        }
+
+        reject(err);
+      });
   });
 };
 
@@ -26,6 +39,13 @@ export const deleteLike = (userId: number, postId: number) => {
         },
       })
       .then(resolve)
-      .catch(reject);
+      .catch((err: { code: string }) => {
+        // check if record does not exist
+        if (err.code === 'P2025') {
+          return;
+        }
+
+        reject(err);
+      });
   });
 };
