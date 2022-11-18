@@ -11,7 +11,8 @@
     "baseUrl": ".",
     "paths": {
       "@/models/*": ["src/models/*"],
-      "@/types/*": ["src/types/*"]
+      "@/types/*": ["src/types/*"],
+      "@/graphql/*": ["src/graphql/*"]
     }
   }
 }
