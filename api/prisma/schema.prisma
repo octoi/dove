@@ -59,14 +59,11 @@ model Like {
 }
 
 model Comment {
-  id         Int       @id @default(autoincrement())
-  comment    String
-  userId     Int
-  postId     Int
-  createdAt  DateTime  @default(now())
-  user       User      @relation(name: "commentedUser", fields: [userId], references: [id]) // relation to commented user
-  post       Post      @relation(name: "commentedPost", fields: [postId], references: [id], onDelete: Cascade) // relationt to commented post
-  // don't if this part works
-  replies    Comment[] @relation("replies") // replies of comment
-  replyingTo Comment[] @relation("replies")
+  id        Int      @id @default(autoincrement())
+  comment   String
+  userId    Int
+  postId    Int
+  createdAt DateTime @default(now())
+  user      User     @relation(name: "commentedUser", fields: [userId], references: [id]) // relation to commented user
+  post      Post     @relation(name: "commentedPost", fields: [postId], references: [id], onDelete: Cascade) // relationt to commented post
 }
