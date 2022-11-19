@@ -12,7 +12,8 @@
     "paths": {
       "@/models/*": ["src/models/*"],
       "@/types/*": ["src/types/*"],
-      "@/graphql/*": ["src/graphql/*"]
+      "@/graphql/*": ["src/graphql/*"],
+      "@/controllers/*": ["src/controllers/*"]
     }
   }
 }
