@@ -7,6 +7,7 @@ const server = new ApolloServer({ schema });
 const PORT: number = Number(process.env.PORT) || 5000;
 
 startStandaloneServer(server, {
+  context: async ({ req }) => ({ req }),
   listen: { port: PORT, path: '/graphql' },
 })
   .then(({ url }) => {
