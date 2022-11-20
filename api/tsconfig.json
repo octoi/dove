@@ -13,7 +13,8 @@
       "@/models/*": ["src/models/*"],
       "@/types/*": ["src/types/*"],
       "@/graphql/*": ["src/graphql/*"],
-      "@/controllers/*": ["src/controllers/*"]
+      "@/controllers/*": ["src/controllers/*"],
+      "@/utils/*": ["src/utils/*"]
     }
   }
 }
