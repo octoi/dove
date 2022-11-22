@@ -8,7 +8,7 @@ export const createComment = (data: CreateCommentArgs) => {
         data: data,
       })
       .then(resolve)
-      .catch(reject);
+      .catch(() => reject('Failed to create comment'));
   });
 };
 
@@ -21,7 +21,7 @@ export const deleteComment = (commentId: number) => {
         },
       })
       .then(resolve)
-      .catch(reject);
+      .catch(() => reject('Failed to delete comment'));
   });
 };
 
@@ -33,12 +33,10 @@ export const loadPostComments = (postId: number) => {
           postId,
         },
         include: {
-          _count: true,
           user: true,
-          replies: true,
         },
       })
       .then(resolve)
-      .catch(reject);
+      .catch(() => reject('Failed to fetch comments'));
   });
 };

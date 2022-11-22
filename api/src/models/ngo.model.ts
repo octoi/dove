@@ -21,7 +21,7 @@ export const createNGO = (userId: number, data: CreateNGOArgs) => {
         },
       })
       .then(resolve)
-      .catch(reject);
+      .catch(() => reject('Failed to create ngo'));
   });
 };
 
@@ -35,7 +35,7 @@ export const loadNGO = (page: number) => {
         take: 10,
       })
       .then(resolve)
-      .catch(reject);
+      .catch(() => reject('Failed to load NGOs'));
   });
 };
 
@@ -49,7 +49,7 @@ export const updateNGO = (ngoId: string, data: UpdateNGOArgs) => {
         data,
       })
       .then(resolve)
-      .catch(reject);
+      .catch(() => reject('Failed to update ngo'));
   });
 };
 
@@ -62,7 +62,7 @@ export const deleteNGO = (ngoId: string) => {
         },
       })
       .then(resolve)
-      .catch(reject);
+      .catch(() => reject('Failed to delete ngo'));
   });
 };
 
@@ -81,7 +81,7 @@ export const getNGODetails = (ngoId: string) => {
         },
       })
       .then(resolve)
-      .catch(reject);
+      .catch(() => reject('Failed to get ngo details'));
   });
 };
 
@@ -102,7 +102,7 @@ export const joinNGO = (ngoId: string, userId: number) => {
         },
       })
       .then(resolve)
-      .catch(reject);
+      .catch(() => reject('Failed to join ngo'));
   });
 };
 
@@ -123,7 +123,7 @@ export const makeNGOAdmin = (ngoId: string, userId: number) => {
         },
       })
       .then(resolve)
-      .catch(reject);
+      .catch(() => reject('Failed to assign admin role'));
   });
 };
 
@@ -144,7 +144,7 @@ export const removeNGOAdmin = (ngoId: string, userId: number) => {
         },
       })
       .then(resolve)
-      .catch(reject);
+      .catch(() => reject('Failed to remove admin'));
   });
 };
 
@@ -165,7 +165,7 @@ export const removeMember = (ngoId: string, userId: number) => {
         },
       })
       .then(resolve)
-      .catch(reject);
+      .catch(() => reject('Failed to remove member'));
   });
 };
 
@@ -184,6 +184,6 @@ export const authenticateNGOAdmin = (userId: number, ngoId: string) => {
         },
       })
       .then(resolve)
-      .catch(reject);
+      .catch(() => reject('Authentication failed'));
   });
 };
