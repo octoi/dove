@@ -4,6 +4,7 @@ import {
   authenticateNGOAdmin,
   createNGO,
   deleteNGO,
+  joinNGO,
   updateNGO,
 } from '@/models/ngo.model';
 
@@ -48,6 +49,12 @@ export const deleteNgoController = async (userId: number, ngoId: string) => {
   }
 
   return await deleteNGO(ngoId).catch((err) => {
+    throw new GraphQLError(err);
+  });
+};
+
+export const joinNgoController = async (userId: number, ngoId: string) => {
+  return await joinNGO(ngoId, userId).catch((err) => {
     throw new GraphQLError(err);
   });
 };
