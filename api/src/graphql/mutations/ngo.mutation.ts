@@ -5,6 +5,7 @@ import { GraphQLNgoType } from '../typedefs/ngo.typedef';
 import { validateCreateNgoArgs } from '../validators/ngo.validator';
 import {
   createNgoController,
+  deleteNgoController,
   updateNgoController,
 } from '@/controllers/ngo.controller';
 
@@ -39,5 +40,16 @@ export const UpdateNgoMutation: GraphQLDefaultFieldConfig = {
     delete requestArgs?.ngoId; // deleting ngoId from data, by passing with ngoId, prisma will throw error
 
     return updateNgoController(user?.id, ngoId, requestArgs);
+  },
+};
+
+export const DeleteNgoMutation: GraphQLDefaultFieldConfig = {
+  type: GraphQLNgoType,
+  args: {
+    ngoId: { type: GraphQLString },
+  },
+  resolve(_, requestArgs, context) {
+    const user: any = getUserFromContext(context);
+    return deleteNgoController(user?.id, requestArgs?.ngoId);
   },
 };
