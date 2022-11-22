@@ -1,5 +1,5 @@
 import { GraphQLObjectType } from 'graphql';
-import { CreateNgoMutation } from './ngo.mutation';
+import { CreateNgoMutation, UpdateNgoMutation } from './ngo.mutation';
 import {
   LoginMutation,
   RegisterMutation,
@@ -14,5 +14,6 @@ export const Mutations = new GraphQLObjectType({
     updateUser: UpdateMutation,
     // ngo operations
     createNgo: CreateNgoMutation,
+    updateNgo: UpdateNgoMutation,
   }),
 });
