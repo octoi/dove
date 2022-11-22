@@ -1,4 +1,4 @@
-import { GraphQLString } from 'graphql';
+import { GraphQLInt, GraphQLString } from 'graphql';
 import { getUserFromContext } from '@/utils/jwt';
 import { GraphQLDefaultFieldConfig } from '../typedefs/graphql.typedef';
 import { GraphQLNgoType } from '../typedefs/ngo.typedef';
@@ -7,6 +7,7 @@ import {
   createNgoController,
   deleteNgoController,
   joinNgoController,
+  makeNgoAdminController,
   updateNgoController,
 } from '@/controllers/ngo.controller';
 
@@ -63,5 +64,21 @@ export const JoinNgoMutation: GraphQLDefaultFieldConfig = {
   resolve(_, requestArgs, context) {
     const user: any = getUserFromContext(context);
     return joinNgoController(user?.id, requestArgs?.ngoId);
+  },
+};
+
+export const MakeNgoAdminMutation: GraphQLDefaultFieldConfig = {
+  type: GraphQLNgoType,
+  args: {
+    ngoId: { type: GraphQLString },
+    userId: { type: GraphQLInt },
+  },
+  resolve(_, requestArgs, context) {
+    const user: any = getUserFromContext(context);
+    return makeNgoAdminController(
+      user?.id,
+      requestArgs?.userId,
+      requestArgs?.ngoId
+    );
   },
 };
