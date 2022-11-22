@@ -6,6 +6,7 @@ import { validateCreateNgoArgs } from '../validators/ngo.validator';
 import {
   createNgoController,
   deleteNgoController,
+  joinNgoController,
   updateNgoController,
 } from '@/controllers/ngo.controller';
 
@@ -51,5 +52,16 @@ export const DeleteNgoMutation: GraphQLDefaultFieldConfig = {
   resolve(_, requestArgs, context) {
     const user: any = getUserFromContext(context);
     return deleteNgoController(user?.id, requestArgs?.ngoId);
+  },
+};
+
+export const JoinNgoMutation: GraphQLDefaultFieldConfig = {
+  type: GraphQLNgoType,
+  args: {
+    ngoId: { type: GraphQLString },
+  },
+  resolve(_, requestArgs, context) {
+    const user: any = getUserFromContext(context);
+    return joinNgoController(user?.id, requestArgs?.ngoId);
   },
 };
