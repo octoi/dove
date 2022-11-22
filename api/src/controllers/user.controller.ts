@@ -1,11 +1,11 @@
 import { GraphQLError } from 'graphql';
 import { registerUser, loginUser, updateUser } from '@/models/user.model';
+import { generateToken } from '@/utils/jwt';
 import {
   UserLoginArgs,
   UserRegisterArgs,
   UserUpdateArgs,
 } from '@/types/user.type';
-import { generateToken } from '@/utils/jwt';
 
 export const registerController = async (data: UserRegisterArgs) => {
   const user: any = await registerUser(data).catch((err) => {
@@ -30,8 +30,8 @@ export const loginController = async (data: UserLoginArgs) => {
 };
 
 export const updateController = async (
-  data: UserUpdateArgs,
-  userId: number
+  userId: number,
+  data: UserUpdateArgs
 ) => {
   const user: any = await updateUser(data, userId).catch((err) => {
     throw new GraphQLError(err);

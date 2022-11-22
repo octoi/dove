@@ -49,6 +49,6 @@ export const UpdateMutation: GraphQLDefaultFieldConfig = {
   },
   resolve(_, requestArgs, context) {
     const user: any = getUserFromContext(context);
-    return updateController(requestArgs, user?.id);
+    return updateController(user?.id, requestArgs);
   },
 };
