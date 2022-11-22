@@ -8,7 +8,7 @@ const PORT: number = Number(process.env.PORT) || 5000;
 
 startStandaloneServer(server, {
   context: async ({ req }) => ({ req }),
-  listen: { port: PORT, path: '/graphql' },
+  listen: { port: PORT },
 })
   .then(({ url }) => {
     console.log(`[🚀] GRAPHQL SERVER AT ${url}`);

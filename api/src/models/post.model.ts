@@ -9,7 +9,7 @@ export const createPost = (data: CreatePostArgs) => {
         data,
       })
       .then(resolve)
-      .catch(reject);
+      .catch(() => reject('Failed to create post'));
   });
 };
 
@@ -22,7 +22,7 @@ export const deletePost = (postId: number) => {
         },
       })
       .then(resolve)
-      .catch(reject);
+      .catch(() => reject('Failed to delete post'));
   });
 };
 
@@ -61,7 +61,7 @@ export const loadUserFeed = (userId: number, page: number) => {
           take: 10,
         })
         .then(resolve)
-        .catch(reject);
+        .catch(() => reject('Failed to load user feed'));
     });
   });
 };
@@ -81,6 +81,6 @@ export const getPost = (postId: number) => {
         },
       })
       .then(resolve)
-      .catch(reject);
+      .catch(() => reject('Failed to get post'));
   });
 };

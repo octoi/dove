@@ -22,7 +22,7 @@ export const createLike = (userId: number, postId: number) => {
           return;
         }
 
-        reject(err);
+        reject('Failed to like post');
       });
   });
 };
@@ -45,7 +45,7 @@ export const deleteLike = (userId: number, postId: number) => {
           return;
         }
 
-        reject(err);
+        reject('Failed to remove like');
       });
   });
 };

@@ -130,6 +130,6 @@ export const getUserNGOs = (userId: number) => {
         },
       })
       .then(resolve)
-      .catch(reject);
+      .catch(() => reject('Failed to fetch user NGOs'));
   });
 };

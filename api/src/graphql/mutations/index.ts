@@ -4,6 +4,11 @@ import {
   RegisterMutation,
   UpdateMutation,
 } from './user.mutation';
+import {
+  CreateNgoMutation,
+  DeleteNgoMutation,
+  UpdateNgoMutation,
+} from './ngo.mutation';
 
 export const Mutations = new GraphQLObjectType({
   name: 'Mutations',
@@ -11,5 +16,9 @@ export const Mutations = new GraphQLObjectType({
     login: LoginMutation,
     register: RegisterMutation,
     updateUser: UpdateMutation,
+    // ngo operations
+    createNgo: CreateNgoMutation,
+    updateNgo: UpdateNgoMutation,
+    deleteNgo: DeleteNgoMutation,
   }),
 });

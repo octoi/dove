@@ -1,13 +1,12 @@
 import { UserLoginArgs, UserRegisterArgs } from '@/types/user.type';
+import { ValidatorMessage } from '@/utils/constants';
 import { GraphQLError } from 'graphql';
-
-const MESSAGE = 'required fields not found';
 
 export const validateRegisterArgs = (
   args: UserRegisterArgs
 ): UserRegisterArgs => {
   if (!args.email || !args.name || !args.password || !args.profile) {
-    throw new GraphQLError(MESSAGE);
+    throw new GraphQLError(ValidatorMessage);
   }
 
   return args;
@@ -15,7 +14,7 @@ export const validateRegisterArgs = (
 
 export const validateLoginArgs = (args: UserLoginArgs): UserLoginArgs => {
   if (!args.email || !args.password) {
-    throw new GraphQLError(MESSAGE);
+    throw new GraphQLError(ValidatorMessage);
   }
 
   return args;
