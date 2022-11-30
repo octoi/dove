@@ -1,7 +1,9 @@
+import { Layout } from '@/components/Layout';
+
 export default function HomePage() {
   return (
-    <div className='p-5'>
+    <Layout title='Dove'>
       <h1 className='text-2xl font-medium'>Hello world</h1>
-    </div>
+    </Layout>
   );
 }
