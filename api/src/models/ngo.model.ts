@@ -177,7 +177,7 @@ export const authenticateNGOAdmin = (userId: number, ngoId: string) => {
         where: {
           id: ngoId,
           admins: {
-            every: {
+            some: {
               id: userId,
             },
           },
