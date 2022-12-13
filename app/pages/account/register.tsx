@@ -56,6 +56,7 @@ export default function RegisterPage() {
         });
       })
       .finally(() => {
+        setPassword('');
         setLoading(false);
       });
   };

@@ -7,6 +7,7 @@ export const LOGIN_USER = gql`
       email
       name
       profile
+      bio
       token
     }
   }
@@ -29,6 +30,32 @@ export const REGISTER_USER = gql`
       email
       name
       profile
+      bio
+      token
+    }
+  }
+`;
+
+export const UPDATE_USER = gql`
+  mutation (
+    $name: String
+    $email: String
+    $password: String
+    $profile: String
+    $bio: String
+  ) {
+    updateUser(
+      name: $name
+      email: $email
+      password: $password
+      profile: $profile
+      bio: $bio
+    ) {
+      id
+      email
+      name
+      profile
+      bio
       token
     }
   }
