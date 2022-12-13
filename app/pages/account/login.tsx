@@ -17,6 +17,8 @@ export default function LoginPage() {
 
   const [loginUser] = useMutation(LOGIN_USER);
 
+  const urlSearchParams = new URLSearchParams(window.location.search);
+
   const handleFormSubmit = (e: any) => {
     e.preventDefault();
     setLoading(true);
@@ -33,6 +35,15 @@ export default function LoginPage() {
           isClosable: true,
           duration: 3000,
         });
+
+        // redirect to next path, if it is given
+        let nextPath = urlSearchParams.get('next');
+
+        if (nextPath) {
+          router.push(nextPath);
+          return;
+        }
+
         router.push(Paths.home);
       })
       .catch((err) => {
