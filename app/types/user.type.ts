@@ -4,4 +4,5 @@ export interface UserType {
   email: string;
   profile: string;
   token: string;
+  bio?: string;
 }
