@@ -57,6 +57,7 @@ export default function LoginPage() {
         });
       })
       .finally(() => {
+        setPassword('');
         setLoading(false);
       });
   };
