@@ -137,3 +137,6 @@ pnpm-lock.yaml
 
 # prisma migrations
 migrations
+
+# file uploads
+uploads/
