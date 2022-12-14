@@ -12,8 +12,9 @@ const graphqlServer = new ApolloServer({ schema });
 
 const PORT = Number(process.env.PORT) || 5000;
 
-// configure file api
+app.use(cors());
 
+// configure file api
 let storage = multer.diskStorage({
   destination: (_, __, cb) => cb(null, 'uploads/'),
   filename: (_, file, cb) => {
