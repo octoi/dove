@@ -7,6 +7,8 @@ import { useMutation } from '@apollo/client';
 import { UPDATE_USER } from '@/graphql/account/account.mutation';
 import { setUser } from '@/utils/user';
 import { Paths } from '@/utils/paths';
+import { uploadImageHelper } from '@/utils/imageUpload';
+import { EditImageWrapper } from '@/components/EditImageWrapper';
 import {
   Avatar,
   Button,
@@ -39,43 +41,52 @@ export default function SettingsPage() {
 
   const [updateUser] = useMutation(UPDATE_USER);
 
-  const handleFormSubmit = (e: any) => {
+  const handleFormSubmit = async (e: any) => {
     e.preventDefault();
     setLoading(true);
 
-    updateUser({
-      variables: {
-        name,
-        email,
-        password,
-        profile,
-        bio,
-      },
-    })
-      .then(({ data }) => {
-        const updateData = data?.updateUser;
-        setUser(updateData);
-        toast({
-          title: 'Looking good',
-          description: 'Updated profile successfully',
-          status: 'success',
-          position: 'top-right',
-          isClosable: true,
-          duration: 3000,
-        });
+    uploadImageHelper(profile)
+      .then((imageURL) => {
+        updateUser({
+          variables: {
+            name,
+            email,
+            password,
+            profile: imageURL,
+            bio,
+          },
+        })
+          .then(({ data }) => {
+            const updateData = data?.updateUser;
+            setUser(updateData);
+            toast({
+              title: 'Looking good',
+              description: 'Updated profile successfully',
+              status: 'success',
+              position: 'top-right',
+              isClosable: true,
+              duration: 3000,
+            });
+          })
+          .catch((err) => {
+            toast({
+              title: 'Failed to update profile',
+              description: err?.message,
+              status: 'error',
+              position: 'top-right',
+              isClosable: true,
+              duration: 5000,
+            });
+          })
+          .finally(() => {
+            setPassword('');
+            setLoading(false);
+          });
       })
-      .catch((err) => {
-        toast({
-          title: 'Failed to update profile',
-          description: err?.message,
-          status: 'error',
-          position: 'top-right',
-          isClosable: true,
-          duration: 5000,
-        });
+      .catch(() => {
+        alert('Failed to upload image');
       })
       .finally(() => {
-        setPassword('');
         setLoading(false);
       });
   };
@@ -87,19 +98,14 @@ export default function SettingsPage() {
           <Flex direction='column' p={8} className='w-full max-w-xl'>
             <form onSubmit={handleFormSubmit}>
               <h2 className='text-3xl font-bold mb-5'>Update profile</h2>
-              <Flex alignItems='center'>
-                <Input
-                  placeholder='Profile'
-                  type='text'
-                  size='lg'
-                  variant='filled'
-                  value={profile}
-                  onChange={(e) => setProfile(e.target.value)}
-                  disabled={loading}
-                  required
-                />
-                <Avatar src={profile} ml={2} />
-              </Flex>
+              <EditImageWrapper image={profile} setImage={setProfile}>
+                <div className='flex items-center flex-col'>
+                  <Avatar src={profile} name={name} size='xl' mb={3} />
+                  <Button colorScheme='blue' variant='outline'>
+                    Edit image
+                  </Button>
+                </div>
+              </EditImageWrapper>
               <Input
                 placeholder='Name'
                 type='text'
