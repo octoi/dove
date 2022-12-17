@@ -1,3 +1,4 @@
+import fs from 'fs';
 import http from 'http';
 import express from 'express';
 import cors from 'cors';
@@ -31,6 +32,27 @@ app.use('/file', express.static('uploads')); // serving uploaded files to `file/
 app.post('/file', upload.single('uploaded_file'), (req, res) => {
   let path = `${req.file?.filename}`;
   res.json(path);
+});
+
+app.delete('/file/:filename', (req, res) => {
+  let filename = req.params?.filename;
+
+  if (!filename) {
+    res.status(422).json('Filename is not provided');
+    return;
+  }
+
+  let filepath = `./uploads/${filename}`;
+
+  fs.unlink(filepath, (err) => {
+    if (err && err.code == 'ENOENT') {
+      res.status(404).json('File does not exist.');
+    } else if (err) {
+      res.status(500).json('Failed to delete file.');
+    } else {
+      res.status(200).json('Deleted successfully.');
+    }
+  });
 });
 
 const startServer = async () => {
