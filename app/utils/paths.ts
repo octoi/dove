@@ -5,5 +5,5 @@ export enum Paths {
   settings = '/account/settings',
   user = '/user',
   ngo = '/ngo',
-  createNgo = '/new',
+  createNgo = '/ngo/new',
 }
