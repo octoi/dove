@@ -19,7 +19,7 @@ export const Layout: ReactComponent<Props> = ({
     <>
       <Head>
         <title>{title}</title>
-        <link rel='icon' href='/favicon.png' />
+        <link rel='icon' href={image || '/favicon.png'} />
         <meta name='description' content={description} />
         <meta property='og:title' content={title} />
         <meta property='og:description' content={description} />
