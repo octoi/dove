@@ -7,6 +7,7 @@ import {
   joinNGO,
   makeNGOAdmin,
   updateNGO,
+  getNGODetails,
 } from '@/models/ngo.model';
 
 export const createNgoController = async (
@@ -76,4 +77,10 @@ export const makeNgoAdminController = async (
   }
 
   return await makeNGOAdmin(ngoId, targetUserId);
+};
+
+export const getNgoController = async (ngoId: string) => {
+  return await getNGODetails(ngoId).catch((err) => {
+    throw new GraphQLError(err);
+  });
 };
