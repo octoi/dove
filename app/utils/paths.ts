@@ -6,4 +6,5 @@ export enum Paths {
   user = '/user',
   ngo = '/ngo',
   createNgo = '/ngo/new',
+  notFound = '/404',
 }
