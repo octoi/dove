@@ -3,7 +3,6 @@ import { Layout } from '@/components/Layout';
 import { NgoType } from '@/types/ngo.type';
 import { getApolloClient } from '@/utils/apollo';
 import { GSSPRedirectData } from '@/utils/constant';
-import { SlOptions } from 'react-icons/sl';
 import { useQuery } from '@apollo/client';
 import { UserList } from '@/components/ngoPage/UserList';
 import { IsAdminContextWrapper } from '@/components/ngoPage/IsAdminContext';
@@ -16,7 +15,6 @@ import {
   Avatar,
   Container,
   Flex,
-  IconButton,
   Tab,
   TabList,
   TabPanel,
@@ -24,6 +22,7 @@ import {
   Tabs,
   Text,
 } from '@chakra-ui/react';
+import { NgoOptions } from '@/components/ngoPage/NgoOptions';
 
 interface Props {
   ngo: NgoType;
@@ -66,7 +65,7 @@ const NgoPage: NextPage<Props> = ({ ngo }) => {
                 <Tab>Members</Tab>
                 <Tab>Admins</Tab>
               </TabList>
-              <IconButton aria-label='options' icon={<SlOptions />} />
+              <NgoOptions ngoId={ngo.id} />
             </Flex>
             <TabPanels>
               <TabPanel>
