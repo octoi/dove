@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Paths } from '@/utils/paths';
 import { UserType } from '@/types/user.type';
 import { Avatar, Flex, IconButton, Text } from '@chakra-ui/react';
-import { IsAdminContext } from './IsAdminContext';
+import { NgoUserContext } from './NgoUserContext';
 import { SlOptions } from 'react-icons/sl';
 
 interface Props {
@@ -12,7 +12,7 @@ interface Props {
 }
 
 export const UserList: React.FC<Props> = ({ users, title }) => {
-  const { isAdmin, user: currentUser } = useContext(IsAdminContext);
+  const { isAdmin, user: currentUser } = useContext(NgoUserContext);
 
   return (
     <div>
