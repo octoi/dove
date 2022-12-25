@@ -1,5 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { SlOptions } from 'react-icons/sl';
+import { VscCopy } from 'react-icons/vsc';
+import { BiLogOut } from 'react-icons/bi';
+import { IoAdd } from 'react-icons/io5';
+import { NgoUserContext } from './NgoUserContext';
 import {
   IconButton,
   Menu,
@@ -13,16 +17,25 @@ interface Props {
 }
 
 export const NgoOptions: React.FC<Props> = ({ ngoId }) => {
+  const { isMember, isAdmin } = useContext(NgoUserContext);
+
   return (
     <Menu>
       <MenuButton>
         <IconButton aria-label='options' icon={<SlOptions />} />
       </MenuButton>
       <MenuList>
-        <MenuItem>Copy Ngo URL</MenuItem>
-        {/* TODO: display according to user joined or not */}
-        <MenuItem color='teal.400'>Join Ngo</MenuItem>
-        <MenuItem color='red.400'>Leave Ngo</MenuItem>
+        <MenuItem icon={<VscCopy className='text-lg' />}>Copy Ngo URL</MenuItem>
+        {isAdmin && (
+          <MenuItem icon={<IoAdd className='text-lg' />}>Create Post</MenuItem>
+        )}
+        {isMember ? (
+          <MenuItem color='red.400' icon={<BiLogOut className='text-lg' />}>
+            Leave Ngo
+          </MenuItem>
+        ) : (
+          <MenuItem color='teal.400'>Join Ngo</MenuItem>
+        )}
       </MenuList>
     </Menu>
   );

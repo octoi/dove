@@ -5,7 +5,8 @@ import { getApolloClient } from '@/utils/apollo';
 import { GSSPRedirectData } from '@/utils/constant';
 import { useQuery } from '@apollo/client';
 import { UserList } from '@/components/ngoPage/UserList';
-import { IsAdminContextWrapper } from '@/components/ngoPage/IsAdminContext';
+import { NgoUserContextWrapper } from '@/components/ngoPage/NgoUserContext';
+import { NgoOptions } from '@/components/ngoPage/NgoOptions';
 import {
   GET_NGO_ADMINS,
   GET_NGO_DETAILS,
@@ -22,7 +23,6 @@ import {
   Tabs,
   Text,
 } from '@chakra-ui/react';
-import { NgoOptions } from '@/components/ngoPage/NgoOptions';
 
 interface Props {
   ngo: NgoType;
@@ -47,7 +47,11 @@ const NgoPage: NextPage<Props> = ({ ngo }) => {
         className='w-full h-52 md:h-72 object-cover rounded'
         alt=''
       />
-      <IsAdminContextWrapper ngoCreatorId={Number(ngo.creatorId)}>
+      <NgoUserContextWrapper
+        ngoCreatorId={Number(ngo.creatorId)}
+        members={membersData?.getNgoDetails?.members || []}
+        admins={adminsData?.getNgoDetails?.admins || []}
+      >
         <Container mt={10} maxW='container.xl'>
           <Flex>
             <Avatar src={ngo.profile} size={{ base: 'lg', md: 'xl' }} />
@@ -98,7 +102,7 @@ const NgoPage: NextPage<Props> = ({ ngo }) => {
             </TabPanels>
           </Tabs>
         </Container>
-      </IsAdminContextWrapper>
+      </NgoUserContextWrapper>
     </Layout>
   );
 };
