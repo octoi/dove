@@ -6,10 +6,13 @@ import { validateCreateNgoArgs } from '../validators/ngo.validator';
 import {
   createNgoController,
   deleteNgoController,
+  dismissNgoAdminController,
   joinNgoController,
   makeNgoAdminController,
+  removeMemberController,
   updateNgoController,
 } from '@/controllers/ngo.controller';
+import { removeMember } from '@/models/ngo.model';
 
 export const CreateNgoMutation: GraphQLDefaultFieldConfig = {
   type: GraphQLNgoType,
@@ -80,5 +83,48 @@ export const MakeNgoAdminMutation: GraphQLDefaultFieldConfig = {
       requestArgs?.userId,
       requestArgs?.ngoId
     );
+  },
+};
+
+export const DismissNgoAdminMutation: GraphQLDefaultFieldConfig = {
+  type: GraphQLNgoType,
+  args: {
+    ngoId: { type: GraphQLString },
+    userId: { type: GraphQLInt },
+  },
+  resolve(_, requestArgs, context) {
+    const user: any = getUserFromContext(context);
+    return dismissNgoAdminController(
+      user?.id,
+      requestArgs?.userId,
+      requestArgs?.ngoId
+    );
+  },
+};
+
+export const RemoveMemberMutation: GraphQLDefaultFieldConfig = {
+  type: GraphQLNgoType,
+  args: {
+    ngoId: { type: GraphQLString },
+    userId: { type: GraphQLInt },
+  },
+  resolve(_, requestArgs, context) {
+    const user: any = getUserFromContext(context);
+    return removeMemberController(
+      user?.id,
+      requestArgs?.userId,
+      requestArgs?.ngoId
+    );
+  },
+};
+
+export const LeaveNgoMutation: GraphQLDefaultFieldConfig = {
+  type: GraphQLNgoType,
+  args: {
+    ngoId: { type: GraphQLString },
+  },
+  async resolve(_, requestArgs, context) {
+    const user: any = getUserFromContext(context);
+    return await removeMember(requestArgs?.ngoId, user?.id);
   },
 };

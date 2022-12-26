@@ -128,7 +128,7 @@ export const makeNGOAdmin = (ngoId: string, userId: number) => {
 };
 
 // disconnect user from admins
-export const removeNGOAdmin = (ngoId: string, userId: number) => {
+export const dismissNGOAdmin = (ngoId: string, userId: number) => {
   return new Promise((resolve, reject) => {
     prismaClient.ngo
       .update({
@@ -158,6 +158,11 @@ export const removeMember = (ngoId: string, userId: number) => {
         },
         data: {
           members: {
+            disconnect: {
+              id: userId,
+            },
+          },
+          admins: {
             disconnect: {
               id: userId,
             },

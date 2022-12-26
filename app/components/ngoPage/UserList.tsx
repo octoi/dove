@@ -1,24 +1,66 @@
 import React, { useContext } from 'react';
 import Link from 'next/link';
 import { Paths } from '@/utils/paths';
-import { UserType } from '@/types/user.type';
-import { Avatar, Flex, IconButton, Text } from '@chakra-ui/react';
 import { NgoUserContext } from './NgoUserContext';
 import { SlOptions } from 'react-icons/sl';
+import { BiDetail } from 'react-icons/bi';
+import { MdOutlineAdminPanelSettings } from 'react-icons/md';
+import { IoBan } from 'react-icons/io5';
+import { RxReload } from 'react-icons/rx';
+import { UserType } from '@/types/user.type';
+import { DocumentNode, useMutation } from '@apollo/client';
+import { REMOVE_MEMBER } from '@/graphql/ngo/ngoUser.mutation';
+import {
+  Avatar,
+  Flex,
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Text,
+  useToast,
+} from '@chakra-ui/react';
 
 interface Props {
   users: UserType[];
   title: string;
+  ngoId: string;
+  refetch: any;
+  userAdminOption: {
+    title: string;
+    mutation: DocumentNode;
+  };
 }
 
-export const UserList: React.FC<Props> = ({ users, title }) => {
+export const UserList: React.FC<Props> = ({
+  users,
+  title,
+  refetch,
+  ngoId,
+  userAdminOption,
+}) => {
+  const toast = useToast();
+
   const { isAdmin, user: currentUser } = useContext(NgoUserContext);
+
+  const [userAdminFunction] = useMutation(userAdminOption.mutation);
+  const [removeMember] = useMutation(REMOVE_MEMBER);
 
   return (
     <div>
-      <Text mb={5} fontSize='xl' fontWeight='semibold'>
-        {title} ({users.length})
-      </Text>
+      <Flex mb={5} alignItems='center'>
+        <Text fontSize='xl' fontWeight='semibold'>
+          {title} ({users.length})
+        </Text>
+        <IconButton
+          ml={3}
+          aria-label='refetch'
+          variant='outline'
+          onClick={() => refetch()}
+          icon={<RxReload className='text-lg' />}
+        />
+      </Flex>
       {users.map((user) => (
         <Flex
           mb={5}
@@ -42,11 +84,77 @@ export const UserList: React.FC<Props> = ({ users, title }) => {
             </Flex>
           </Link>
           {currentUser && currentUser.id != user.id && isAdmin && (
-            <IconButton
-              variant='ghost'
-              aria-label='options'
-              icon={<SlOptions />}
-            />
+            <Menu>
+              <MenuButton>
+                <IconButton
+                  variant='ghost'
+                  aria-label='options'
+                  icon={<SlOptions />}
+                />
+              </MenuButton>
+              <MenuList>
+                <Link href={`${Paths.user}/${user.email}`}>
+                  <MenuItem icon={<BiDetail className='text-lg' />}>
+                    View details
+                  </MenuItem>
+                </Link>
+                <MenuItem
+                  icon={<MdOutlineAdminPanelSettings className='text-lg' />}
+                  onClick={() => {
+                    userAdminFunction({
+                      variables: { ngoId, userId: Number(user.id) },
+                    })
+                      .then(() => {
+                        refetch();
+                        toast({
+                          title: 'Permission changed successfully.',
+                          position: 'top-right',
+                          duration: 3000,
+                          status: 'success',
+                        });
+                      })
+                      .catch(() => {
+                        toast({
+                          title: 'Failed to change user permission.',
+                          position: 'top-right',
+                          duration: 3000,
+                          status: 'error',
+                        });
+                      });
+                  }}
+                >
+                  {userAdminOption.title}
+                </MenuItem>
+                <MenuItem
+                  color='red.500'
+                  icon={<IoBan className='text-lg' />}
+                  onClick={() => {
+                    removeMember({
+                      variables: { ngoId, userId: Number(user.id) },
+                    })
+                      .then(() => {
+                        refetch();
+                        toast({
+                          title: 'Removed user successfully.',
+                          position: 'top-right',
+                          duration: 3000,
+                          status: 'success',
+                        });
+                      })
+                      .catch(() => {
+                        toast({
+                          title: 'Failed to remove user.',
+                          position: 'top-right',
+                          duration: 3000,
+                          status: 'error',
+                        });
+                      });
+                  }}
+                >
+                  Kick user
+                </MenuItem>
+              </MenuList>
+            </Menu>
           )}
         </Flex>
       ))}
