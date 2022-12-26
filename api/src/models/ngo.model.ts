@@ -162,6 +162,11 @@ export const removeMember = (ngoId: string, userId: number) => {
               id: userId,
             },
           },
+          admins: {
+            disconnect: {
+              id: userId,
+            },
+          },
         },
       })
       .then(resolve)
