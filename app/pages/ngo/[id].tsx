@@ -1,108 +1,44 @@
 import { GetServerSideProps, NextPage } from 'next';
-import { Layout } from '@/components/Layout';
-import { NgoType } from '@/types/ngo.type';
-import { getApolloClient } from '@/utils/apollo';
-import { GSSPRedirectData } from '@/utils/constant';
 import { useQuery } from '@apollo/client';
-import { UserList } from '@/components/ngoPage/UserList';
-import { NgoUserContextWrapper } from '@/components/ngoPage/NgoUserContext';
-import { NgoOptions } from '@/components/ngoPage/NgoOptions';
-import {
-  GET_NGO_ADMINS,
-  GET_NGO_DETAILS,
-  GET_NGO_MEMBERS,
-} from '@/graphql/ngo/ngo.query';
-import {
-  Avatar,
-  Container,
-  Flex,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-  Text,
-} from '@chakra-ui/react';
+import { Layout } from '@/components/Layout';
+import { GET_NGO_DETAILS } from '@/graphql/ngo/ngo.query';
+import { useRouter } from 'next/router';
+import { NgoPageContent } from '@/components/ngoPage';
+import { useEffect, useState } from 'react';
+import { NgoType } from '@/types/ngo.type';
+import { Paths } from '@/utils/paths';
 
 interface Props {
-  ngo: NgoType;
+  ngoId: string;
 }
 
-const NgoPage: NextPage<Props> = ({ ngo }) => {
-  const {
-    loading: membersLoading,
-    data: membersData,
-    error: membersError,
-  } = useQuery(GET_NGO_MEMBERS, { variables: { ngoId: ngo.id } });
-  const {
-    loading: adminsLoading,
-    data: adminsData,
-    error: adminsError,
-  } = useQuery(GET_NGO_ADMINS, { variables: { ngoId: ngo.id } });
+const NgoPage: NextPage<Props> = ({ ngoId }) => {
+  const [ngo, setNgo] = useState<NgoType | null>(null);
+
+  const router = useRouter();
+  const { loading, error, data } = useQuery(GET_NGO_DETAILS, {
+    variables: { ngoId },
+  });
+
+  useEffect(() => {
+    if (loading || error) return;
+
+    if (data?.getNgoDetails) {
+      setNgo(data?.getNgoDetails);
+      return;
+    }
+    router.push(Paths.notFound);
+  }, [data]);
 
   return (
-    <Layout title={ngo.name} description={ngo.description} image={ngo.profile}>
-      <img
-        src={ngo.banner}
-        className='w-full h-52 md:h-72 object-cover rounded'
-        alt=''
-      />
-      <NgoUserContextWrapper
-        ngoCreatorId={Number(ngo.creatorId)}
-        members={membersData?.getNgoDetails?.members || []}
-        admins={adminsData?.getNgoDetails?.admins || []}
-      >
-        <Container mt={10} maxW='container.xl'>
-          <Flex>
-            <Avatar src={ngo.profile} size={{ base: 'lg', md: 'xl' }} />
-            <Flex ml={5} direction='column'>
-              <Text fontSize={{ base: '2xl', md: '3xl' }} fontWeight='bold'>
-                {ngo.name}
-              </Text>
-              <Text fontSize={{ base: 'lg', md: 'xl' }}>{ngo.description}</Text>
-            </Flex>
-          </Flex>
-          <Tabs mt={5} size={{ base: 'md', md: 'lg' }} variant='soft-rounded'>
-            <Flex alignItems='center' justifyContent='space-between'>
-              <TabList>
-                <Tab>Posts</Tab>
-                <Tab>Members</Tab>
-                <Tab>Admins</Tab>
-              </TabList>
-              <NgoOptions ngoId={ngo.id} />
-            </Flex>
-            <TabPanels>
-              <TabPanel>
-                <p>Posts</p>
-              </TabPanel>
-              <TabPanel>
-                {membersLoading && <p>Loading ...</p>}
-                {membersError && (
-                  <p className='text-red-600'>{membersError.message}</p>
-                )}
-                {membersData && (
-                  <UserList
-                    title='Members'
-                    users={membersData.getNgoDetails?.members}
-                  />
-                )}
-              </TabPanel>
-              <TabPanel>
-                {adminsLoading && <p>Loading ...</p>}
-                {adminsError && (
-                  <p className='text-red-600'>{adminsError.message}</p>
-                )}
-                {adminsData && (
-                  <UserList
-                    title='Admins'
-                    users={adminsData.getNgoDetails?.admins}
-                  />
-                )}
-              </TabPanel>
-            </TabPanels>
-          </Tabs>
-        </Container>
-      </NgoUserContextWrapper>
+    <Layout
+      title={ngo ? ngo.name : loading ? 'Loading..' : 'Error'}
+      description={ngo ? ngo.description : undefined}
+      image={ngo ? ngo.profile : undefined}
+    >
+      {loading && <p>Loading ...</p>}
+      {error && <p>{error.message}</p>}
+      {ngo && <NgoPageContent ngo={ngo} />}
     </Layout>
   );
 };
@@ -112,24 +48,9 @@ export default NgoPage;
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const ngoId = params?.id;
 
-  const client = getApolloClient();
-
-  const responseData: any = await client
-    .query({
-      query: GET_NGO_DETAILS,
-      variables: { ngoId },
-    })
-    .catch(() => {
-      return GSSPRedirectData;
-    });
-
-  const ngoData = responseData?.data?.getNgoDetails;
-
-  if (!ngoData) return GSSPRedirectData;
-
   return {
     props: {
-      ngo: ngoData,
+      ngoId,
     },
   };
 };
