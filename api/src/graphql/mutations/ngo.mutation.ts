@@ -6,6 +6,7 @@ import { validateCreateNgoArgs } from '../validators/ngo.validator';
 import {
   createNgoController,
   deleteNgoController,
+  dismissNgoAdminController,
   joinNgoController,
   makeNgoAdminController,
   updateNgoController,
@@ -76,6 +77,22 @@ export const MakeNgoAdminMutation: GraphQLDefaultFieldConfig = {
   resolve(_, requestArgs, context) {
     const user: any = getUserFromContext(context);
     return makeNgoAdminController(
+      user?.id,
+      requestArgs?.userId,
+      requestArgs?.ngoId
+    );
+  },
+};
+
+export const DismissNgoAdminMutation: GraphQLDefaultFieldConfig = {
+  type: GraphQLNgoType,
+  args: {
+    ngoId: { type: GraphQLString },
+    userId: { type: GraphQLInt },
+  },
+  resolve(_, requestArgs, context) {
+    const user: any = getUserFromContext(context);
+    return dismissNgoAdminController(
       user?.id,
       requestArgs?.userId,
       requestArgs?.ngoId

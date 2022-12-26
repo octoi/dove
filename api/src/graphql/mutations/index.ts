@@ -7,6 +7,7 @@ import {
 import {
   CreateNgoMutation,
   DeleteNgoMutation,
+  DismissNgoAdminMutation,
   JoinNgoMutation,
   MakeNgoAdminMutation,
   UpdateNgoMutation,
@@ -25,5 +26,6 @@ export const Mutations = new GraphQLObjectType({
     // ngo user operations
     joinNgo: JoinNgoMutation,
     makeNgoAdmin: MakeNgoAdminMutation,
+    dismissNgoAdmin: DismissNgoAdminMutation,
   }),
 });
