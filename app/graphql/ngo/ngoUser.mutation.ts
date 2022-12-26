@@ -15,3 +15,11 @@ export const DISMISS_USER_ADMIN = gql`
     }
   }
 `;
+
+export const REMOVE_MEMBER = gql`
+  mutation ($ngoId: String, $userId: Int) {
+    removeMember(ngoId: $ngoId, userId: $userId) {
+      id
+    }
+  }
+`;

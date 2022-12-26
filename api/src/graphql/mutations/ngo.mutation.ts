@@ -9,6 +9,7 @@ import {
   dismissNgoAdminController,
   joinNgoController,
   makeNgoAdminController,
+  removeMemberController,
   updateNgoController,
 } from '@/controllers/ngo.controller';
 
@@ -93,6 +94,22 @@ export const DismissNgoAdminMutation: GraphQLDefaultFieldConfig = {
   resolve(_, requestArgs, context) {
     const user: any = getUserFromContext(context);
     return dismissNgoAdminController(
+      user?.id,
+      requestArgs?.userId,
+      requestArgs?.ngoId
+    );
+  },
+};
+
+export const RemoveMemberMutation: GraphQLDefaultFieldConfig = {
+  type: GraphQLNgoType,
+  args: {
+    ngoId: { type: GraphQLString },
+    userId: { type: GraphQLInt },
+  },
+  resolve(_, requestArgs, context) {
+    const user: any = getUserFromContext(context);
+    return removeMemberController(
       user?.id,
       requestArgs?.userId,
       requestArgs?.ngoId

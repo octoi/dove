@@ -9,6 +9,7 @@ import { IoBan } from 'react-icons/io5';
 import { RxReload } from 'react-icons/rx';
 import { UserType } from '@/types/user.type';
 import { DocumentNode, useMutation } from '@apollo/client';
+import { REMOVE_MEMBER } from '@/graphql/ngo/ngoUser.mutation';
 import {
   Avatar,
   Flex,
@@ -44,6 +45,7 @@ export const UserList: React.FC<Props> = ({
   const { isAdmin, user: currentUser } = useContext(NgoUserContext);
 
   const [userAdminFunction] = useMutation(userAdminOption.mutation);
+  const [removeMember] = useMutation(REMOVE_MEMBER);
 
   return (
     <div>
@@ -111,7 +113,7 @@ export const UserList: React.FC<Props> = ({
                           status: 'success',
                         });
                       })
-                      .catch((err) => {
+                      .catch(() => {
                         toast({
                           title: 'Failed to change user permission.',
                           position: 'top-right',
@@ -123,7 +125,32 @@ export const UserList: React.FC<Props> = ({
                 >
                   {userAdminOption.title}
                 </MenuItem>
-                <MenuItem color='red.500' icon={<IoBan className='text-lg' />}>
+                <MenuItem
+                  color='red.500'
+                  icon={<IoBan className='text-lg' />}
+                  onClick={() => {
+                    removeMember({
+                      variables: { ngoId, userId: Number(user.id) },
+                    })
+                      .then(() => {
+                        refetch();
+                        toast({
+                          title: 'Removed user successfully.',
+                          position: 'top-right',
+                          duration: 3000,
+                          status: 'success',
+                        });
+                      })
+                      .catch(() => {
+                        toast({
+                          title: 'Failed to remove user.',
+                          position: 'top-right',
+                          duration: 3000,
+                          status: 'error',
+                        });
+                      });
+                  }}
+                >
                   Kick user
                 </MenuItem>
               </MenuList>

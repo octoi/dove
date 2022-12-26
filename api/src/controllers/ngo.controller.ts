@@ -9,6 +9,7 @@ import {
   updateNGO,
   getNGODetails,
   dismissNGOAdmin,
+  removeMember,
 } from '@/models/ngo.model';
 
 export const createNgoController = async (
@@ -96,6 +97,24 @@ export const dismissNgoAdminController = async (
   }
 
   return await dismissNGOAdmin(ngoId, targetUserId);
+};
+
+export const removeMemberController = async (
+  requestUserId: number,
+  targetUserId: number,
+  ngoId: string
+) => {
+  let authentication = await authenticateNGOAdmin(requestUserId, ngoId).catch(
+    (err) => {
+      throw new GraphQLError(err);
+    }
+  );
+
+  if (!authentication) {
+    throw new GraphQLError('Permission denied');
+  }
+
+  return await removeMember(ngoId, targetUserId);
 };
 
 export const getNgoController = async (ngoId: string) => {
