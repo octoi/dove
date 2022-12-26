@@ -8,6 +8,7 @@ import {
   makeNGOAdmin,
   updateNGO,
   getNGODetails,
+  dismissNGOAdmin,
 } from '@/models/ngo.model';
 
 export const createNgoController = async (
@@ -77,6 +78,24 @@ export const makeNgoAdminController = async (
   }
 
   return await makeNGOAdmin(ngoId, targetUserId);
+};
+
+export const dismissNgoAdminController = async (
+  requestUserId: number,
+  targetUserId: number,
+  ngoId: string
+) => {
+  let authentication = await authenticateNGOAdmin(requestUserId, ngoId).catch(
+    (err) => {
+      throw new GraphQLError(err);
+    }
+  );
+
+  if (!authentication) {
+    throw new GraphQLError('Permission denied');
+  }
+
+  return await dismissNGOAdmin(ngoId, targetUserId);
 };
 
 export const getNgoController = async (ngoId: string) => {
