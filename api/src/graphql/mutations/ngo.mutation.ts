@@ -125,6 +125,6 @@ export const LeaveNgoMutation: GraphQLDefaultFieldConfig = {
   },
   async resolve(_, requestArgs, context) {
     const user: any = getUserFromContext(context);
-    return await removeMember(user?.id, requestArgs?.ngoId);
+    return await removeMember(requestArgs?.ngoId, user?.id);
   },
 };

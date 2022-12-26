@@ -6,7 +6,7 @@ import { IoAdd } from 'react-icons/io5';
 import { NgoUserContext } from './NgoUserContext';
 import { CgEnter } from 'react-icons/cg';
 import { useMutation } from '@apollo/client';
-import { JOIN_NGO } from '@/graphql/ngo/ngoUser.mutation';
+import { JOIN_NGO, LEAVE_NGO } from '@/graphql/ngo/ngoUser.mutation';
 import {
   Button,
   Flex,
@@ -29,12 +29,13 @@ export const NgoOptions: React.FC<Props> = ({ ngoId, refetch }) => {
   const { isMember, isAdmin, user } = useContext(NgoUserContext);
 
   const [joinNgo] = useMutation(JOIN_NGO);
+  const [leaveNgo] = useMutation(LEAVE_NGO);
 
-  const joinNgoHandler = () => {
-    joinNgo({ variables: { ngoId } })
+  const ngoHandler = (fn: any, successMsg: string, errorMsg: string) => {
+    fn({ variables: { ngoId } })
       .then(() => {
         toast({
-          title: 'Joined ngo successfully.',
+          title: successMsg,
           position: 'top-right',
           duration: 3000,
           status: 'success',
@@ -43,7 +44,7 @@ export const NgoOptions: React.FC<Props> = ({ ngoId, refetch }) => {
       })
       .catch(() => {
         toast({
-          title: 'Failed to join ngo.',
+          title: errorMsg,
           position: 'top-right',
           duration: 3000,
           status: 'error',
@@ -54,7 +55,17 @@ export const NgoOptions: React.FC<Props> = ({ ngoId, refetch }) => {
   return (
     <Flex alignItems='center'>
       {user && !isMember && (
-        <Button colorScheme='teal' mr={2} onClick={joinNgoHandler}>
+        <Button
+          colorScheme='teal'
+          mr={2}
+          onClick={() =>
+            ngoHandler(
+              joinNgo,
+              'Joined ngo successfully.',
+              'Failed to join ngo.'
+            )
+          }
+        >
           Join Ngo
         </Button>
       )}
@@ -77,6 +88,13 @@ export const NgoOptions: React.FC<Props> = ({ ngoId, refetch }) => {
                 <MenuItem
                   color='red.500'
                   icon={<BiLogOut className='text-lg' />}
+                  onClick={() =>
+                    ngoHandler(
+                      leaveNgo,
+                      'Left ngo successfully.',
+                      'Failed to leave ngo.'
+                    )
+                  }
                 >
                   Leave Ngo
                 </MenuItem>
@@ -84,7 +102,13 @@ export const NgoOptions: React.FC<Props> = ({ ngoId, refetch }) => {
                 <MenuItem
                   color='teal.500'
                   icon={<CgEnter className='text-lg' />}
-                  onClick={joinNgoHandler}
+                  onClick={() =>
+                    ngoHandler(
+                      joinNgo,
+                      'Joined ngo successfully.',
+                      'Failed to join ngo.'
+                    )
+                  }
                 >
                   Join Ngo
                 </MenuItem>
