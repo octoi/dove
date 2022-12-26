@@ -23,3 +23,11 @@ export const REMOVE_MEMBER = gql`
     }
   }
 `;
+
+export const JOIN_NGO = gql`
+  mutation ($ngoId: String) {
+    joinNgo(ngoId: $ngoId) {
+      id
+    }
+  }
+`;

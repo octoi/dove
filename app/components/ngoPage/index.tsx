@@ -68,7 +68,7 @@ export const NgoPageContent: React.FC<Props> = ({ ngo }) => {
                 <Tab>Members</Tab>
                 <Tab>Admins</Tab>
               </TabList>
-              <NgoOptions ngoId={ngo.id} />
+              <NgoOptions ngoId={ngo.id} refetch={membersRefetch} />
             </Flex>
             <TabPanels>
               <TabPanel>
