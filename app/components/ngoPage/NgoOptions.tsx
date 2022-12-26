@@ -30,7 +30,7 @@ export const NgoOptions: React.FC<Props> = ({ ngoId }) => {
           <MenuItem icon={<IoAdd className='text-lg' />}>Create Post</MenuItem>
         )}
         {isMember ? (
-          <MenuItem color='red.400' icon={<BiLogOut className='text-lg' />}>
+          <MenuItem color='red.500' icon={<BiLogOut className='text-lg' />}>
             Leave Ngo
           </MenuItem>
         ) : (
