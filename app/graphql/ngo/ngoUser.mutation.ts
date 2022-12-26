@@ -31,3 +31,11 @@ export const JOIN_NGO = gql`
     }
   }
 `;
+
+export const LEAVE_NGO = gql`
+  mutation ($ngoId: String) {
+    leaveNgo(ngoId: $ngoId) {
+      id
+    }
+  }
+`;

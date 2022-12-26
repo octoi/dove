@@ -12,6 +12,7 @@ import {
   removeMemberController,
   updateNgoController,
 } from '@/controllers/ngo.controller';
+import { removeMember } from '@/models/ngo.model';
 
 export const CreateNgoMutation: GraphQLDefaultFieldConfig = {
   type: GraphQLNgoType,
@@ -114,5 +115,16 @@ export const RemoveMemberMutation: GraphQLDefaultFieldConfig = {
       requestArgs?.userId,
       requestArgs?.ngoId
     );
+  },
+};
+
+export const LeaveNgoMutation: GraphQLDefaultFieldConfig = {
+  type: GraphQLNgoType,
+  args: {
+    ngoId: { type: GraphQLString },
+  },
+  async resolve(_, requestArgs, context) {
+    const user: any = getUserFromContext(context);
+    return await removeMember(user?.id, requestArgs?.ngoId);
   },
 };
