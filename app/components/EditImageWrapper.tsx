@@ -34,10 +34,7 @@ export const EditImageWrapper: ReactComponent<Props> = ({
 
   return (
     <>
-      <div
-        onClick={onOpen}
-        className='cursor-pointer w-full flex items-center justify-center'
-      >
+      <div onClick={onOpen} className='cursor-pointer'>
         {children}
       </div>
       <Modal isOpen={isOpen} onClose={onClose} isCentered size='lg'>
