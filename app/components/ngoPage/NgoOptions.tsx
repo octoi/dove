@@ -1,12 +1,15 @@
 import React, { useContext } from 'react';
+import CopyToClipboard from 'react-copy-to-clipboard';
 import { SlOptions } from 'react-icons/sl';
 import { VscCopy } from 'react-icons/vsc';
 import { BiLogOut } from 'react-icons/bi';
-import { IoAdd } from 'react-icons/io5';
+import { IoAdd, IoSettingsOutline } from 'react-icons/io5';
 import { NgoUserContext } from './NgoUserContext';
 import { CgEnter } from 'react-icons/cg';
 import { useMutation } from '@apollo/client';
 import { JOIN_NGO, LEAVE_NGO } from '@/graphql/ngo/ngoUser.mutation';
+import { NgoSettingsWrapper } from './NgoSettingsWrapper';
+import { NgoType } from '@/types/ngo.type';
 import {
   Button,
   Flex,
@@ -17,13 +20,21 @@ import {
   MenuList,
   useToast,
 } from '@chakra-ui/react';
+import { SetState } from '@/types/react.type';
 
 interface Props {
   ngoId: string;
+  ngo: NgoType;
+  setNgo: SetState<NgoType | null>;
   refetch: any;
 }
 
-export const NgoOptions: React.FC<Props> = ({ ngoId, refetch }) => {
+export const NgoOptions: React.FC<Props> = ({
+  ngoId,
+  ngo,
+  setNgo,
+  refetch,
+}) => {
   const toast = useToast();
 
   const { isMember, isAdmin, user } = useContext(NgoUserContext);
@@ -74,15 +85,35 @@ export const NgoOptions: React.FC<Props> = ({ ngoId, refetch }) => {
           <IconButton aria-label='options' icon={<SlOptions />} />
         </MenuButton>
         <MenuList>
-          <MenuItem icon={<VscCopy className='text-lg' />}>
-            Copy Ngo URL
-          </MenuItem>
+          <CopyToClipboard
+            text={window.location.href}
+            onCopy={() => {
+              toast({
+                title: 'Copied To Clipboard',
+                duration: 3000,
+                isClosable: true,
+                position: 'top-right',
+                status: 'success',
+              });
+            }}
+          >
+            <MenuItem icon={<VscCopy className='text-lg' />}>
+              Copy Ngo URL
+            </MenuItem>
+          </CopyToClipboard>
           {user && (
             <>
               {isAdmin && (
-                <MenuItem icon={<IoAdd className='text-lg' />}>
-                  Create Post
-                </MenuItem>
+                <>
+                  <MenuItem icon={<IoAdd className='text-lg' />}>
+                    Create Post
+                  </MenuItem>
+                  <NgoSettingsWrapper ngo={ngo} setNgo={setNgo}>
+                    <MenuItem icon={<IoSettingsOutline className='text-lg' />}>
+                      Ngo Settings
+                    </MenuItem>
+                  </NgoSettingsWrapper>
+                </>
               )}
               {isMember ? (
                 <MenuItem

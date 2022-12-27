@@ -38,7 +38,7 @@ const NgoPage: NextPage<Props> = ({ ngoId }) => {
     >
       {loading && <p>Loading ...</p>}
       {error && <p>{error.message}</p>}
-      {ngo && <NgoPageContent ngo={ngo} />}
+      {ngo && <NgoPageContent ngo={ngo} setNgo={setNgo} />}
     </Layout>
   );
 };

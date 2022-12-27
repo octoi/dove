@@ -24,6 +24,7 @@
     "jwt-decode": "^3.1.2",
     "next": "13.0.5",
     "react": "18.2.0",
+    "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.7.1",
     "typescript": "4.9.3",
@@ -31,6 +32,7 @@
   },
   "devDependencies": {
     "@types/js-cookie": "^3.0.2",
+    "@types/react-copy-to-clipboard": "^5.0.4",
     "autoprefixer": "^10.4.13",
     "postcss": "^8.4.19",
     "tailwindcss": "^3.2.4"

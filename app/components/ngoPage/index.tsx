@@ -20,12 +20,14 @@ import {
   Tabs,
   Text,
 } from '@chakra-ui/react';
+import { SetState } from '@/types/react.type';
 
 interface Props {
   ngo: NgoType;
+  setNgo: SetState<NgoType | null>;
 }
 
-export const NgoPageContent: React.FC<Props> = ({ ngo }) => {
+export const NgoPageContent: React.FC<Props> = ({ ngo, setNgo }) => {
   const {
     loading: membersLoading,
     data: membersData,
@@ -68,7 +70,12 @@ export const NgoPageContent: React.FC<Props> = ({ ngo }) => {
                 <Tab>Members</Tab>
                 <Tab>Admins</Tab>
               </TabList>
-              <NgoOptions ngoId={ngo.id} refetch={membersRefetch} />
+              <NgoOptions
+                ngoId={ngo.id}
+                ngo={ngo}
+                setNgo={setNgo}
+                refetch={membersRefetch}
+              />
             </Flex>
             <TabPanels>
               <TabPanel>
