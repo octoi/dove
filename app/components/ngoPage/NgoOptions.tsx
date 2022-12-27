@@ -8,6 +8,8 @@ import { NgoUserContext } from './NgoUserContext';
 import { CgEnter } from 'react-icons/cg';
 import { useMutation } from '@apollo/client';
 import { JOIN_NGO, LEAVE_NGO } from '@/graphql/ngo/ngoUser.mutation';
+import { NgoSettingsWrapper } from './NgoSettingsWrapper';
+import { NgoType } from '@/types/ngo.type';
 import {
   Button,
   Flex,
@@ -18,13 +20,21 @@ import {
   MenuList,
   useToast,
 } from '@chakra-ui/react';
+import { SetState } from '@/types/react.type';
 
 interface Props {
   ngoId: string;
+  ngo: NgoType;
+  setNgo: SetState<NgoType | null>;
   refetch: any;
 }
 
-export const NgoOptions: React.FC<Props> = ({ ngoId, refetch }) => {
+export const NgoOptions: React.FC<Props> = ({
+  ngoId,
+  ngo,
+  setNgo,
+  refetch,
+}) => {
   const toast = useToast();
 
   const { isMember, isAdmin, user } = useContext(NgoUserContext);
@@ -98,9 +108,11 @@ export const NgoOptions: React.FC<Props> = ({ ngoId, refetch }) => {
                   <MenuItem icon={<IoAdd className='text-lg' />}>
                     Create Post
                   </MenuItem>
-                  <MenuItem icon={<IoSettingsOutline className='text-lg' />}>
-                    Ngo Settings
-                  </MenuItem>
+                  <NgoSettingsWrapper ngo={ngo} setNgo={setNgo}>
+                    <MenuItem icon={<IoSettingsOutline className='text-lg' />}>
+                      Ngo Settings
+                    </MenuItem>
+                  </NgoSettingsWrapper>
                 </>
               )}
               {isMember ? (

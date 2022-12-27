@@ -17,3 +17,23 @@ export const CREATE_NGO = gql`
     }
   }
 `;
+
+export const UPDATE_NGO = gql`
+  mutation (
+    $ngoId: String
+    $name: String
+    $description: String
+    $profile: String
+    $banner: String
+  ) {
+    updateNgo(
+      ngoId: $ngoId
+      name: $name
+      description: $description
+      profile: $profile
+      banner: $banner
+    ) {
+      id
+    }
+  }
+`;
