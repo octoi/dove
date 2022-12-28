@@ -2,10 +2,11 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { Paths } from '@/utils/paths';
 import { UserType } from '@/types/user.type';
-import { LogoutWrapper } from '../account/LogoutWrapper';
 import { CgProfile } from 'react-icons/cg';
 import { BiLogOut } from 'react-icons/bi';
 import { IoSettingsOutline, IoAddOutline } from 'react-icons/io5';
+import { PermissionWrapper } from '../PermissionWrapper';
+import { userStore } from '@/store/user.store';
 import {
   Avatar,
   Button,
@@ -15,6 +16,7 @@ import {
   MenuItem,
   MenuList,
 } from '@chakra-ui/react';
+import { removeToken } from '@/utils/cookie';
 
 interface Props {
   user: UserType;
@@ -22,6 +24,7 @@ interface Props {
 
 export const LoggedInUser: React.FC<Props> = ({ user }) => {
   const router = useRouter();
+  const { removeUser } = userStore.getState();
 
   return (
     <Menu>
@@ -50,7 +53,15 @@ export const LoggedInUser: React.FC<Props> = ({ user }) => {
           >
             Settings
           </MenuItem>
-          <LogoutWrapper>
+          <PermissionWrapper
+            description='Are you sure you want to logout ?'
+            placeholder='Logout'
+            onClick={() => {
+              removeUser();
+              removeToken();
+              router.push(Paths.login);
+            }}
+          >
             <MenuItem icon={<BiLogOut className='text-lg text-red-600' />}>
               <Button
                 colorScheme='red'
@@ -60,7 +71,7 @@ export const LoggedInUser: React.FC<Props> = ({ user }) => {
                 Logout
               </Button>
             </MenuItem>
-          </LogoutWrapper>
+          </PermissionWrapper>
         </MenuGroup>
       </MenuList>
     </Menu>

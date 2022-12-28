@@ -1,9 +1,5 @@
 import React from 'react';
 import { ReactComponent } from '@/types/react.type';
-import { userStore } from '@/store/user.store';
-import { useRouter } from 'next/router';
-import { Paths } from '@/utils/paths';
-import { removeToken } from '@/utils/cookie';
 import {
   AlertDialog,
   AlertDialogBody,
@@ -15,17 +11,25 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 
-export const LogoutWrapper: ReactComponent = ({ children }) => {
-  const { removeUser } = userStore.getState();
+interface Props {
+  description: string;
+  placeholder: string;
+  onClick: () => void;
+}
 
+export const PermissionWrapper: ReactComponent<Props> = ({
+  children,
+  description,
+  placeholder,
+  onClick,
+}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = React.useRef<any>();
-
-  const router = useRouter();
 
   return (
     <>
       <div onClick={onOpen}>{children}</div>
+
       <AlertDialog
         isOpen={isOpen}
         leastDestructiveRef={cancelRef}
@@ -35,27 +39,24 @@ export const LogoutWrapper: ReactComponent = ({ children }) => {
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-              Logout
+              Are you sure ?
             </AlertDialogHeader>
 
-            <AlertDialogBody>Are you sure? You want to logout.</AlertDialogBody>
+            <AlertDialogBody>{description}</AlertDialogBody>
 
             <AlertDialogFooter>
-              <Button ref={cancelRef} onClick={onClose}>
+              <Button ref={cancelRef} onClick={onClose} variant='outline'>
                 Cancel
               </Button>
               <Button
                 colorScheme='red'
                 onClick={() => {
-                  removeToken();
-                  removeUser();
-
                   onClose();
-                  router.push(Paths.login);
+                  onClick();
                 }}
                 ml={3}
               >
-                Logout
+                {placeholder}
               </Button>
             </AlertDialogFooter>
           </AlertDialogContent>
