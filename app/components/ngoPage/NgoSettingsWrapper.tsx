@@ -3,8 +3,11 @@ import { ReactComponent, SetState } from '@/types/react.type';
 import { NgoType } from '@/types/ngo.type';
 import { EditImageWrapper } from '../EditImageWrapper';
 import { useMutation } from '@apollo/client';
-import { UPDATE_NGO } from '@/graphql/ngo/ngo.mutation';
+import { DELETE_NGO, UPDATE_NGO } from '@/graphql/ngo/ngo.mutation';
 import { uploadImageHelper } from '@/utils/imageUpload';
+import { PermissionWrapper } from '../PermissionWrapper';
+import { useRouter } from 'next/router';
+import { Paths } from '@/utils/paths';
 import {
   Modal,
   ModalOverlay,
@@ -32,6 +35,7 @@ export const NgoSettingsWrapper: ReactComponent<Props> = ({
   ngo,
   setNgo,
 }) => {
+  const router = useRouter();
   const toast = useToast();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -43,6 +47,7 @@ export const NgoSettingsWrapper: ReactComponent<Props> = ({
   const [loading, setLoading] = useState(false);
 
   const [updateNgo] = useMutation(UPDATE_NGO);
+  const [deleteNgo] = useMutation(DELETE_NGO);
 
   const closeModal = () => {
     setName(ngo.name);
@@ -89,6 +94,35 @@ export const NgoSettingsWrapper: ReactComponent<Props> = ({
         })
         .catch(reject);
     });
+  };
+
+  const handleDeleteNgo = () => {
+    setLoading(true);
+    deleteNgo({ variables: { ngoId: ngo.id } })
+      .then(() => {
+        router.push(Paths.home);
+        closeModal();
+        toast({
+          title: 'Delete ngo successfully.',
+          status: 'success',
+          position: 'top-right',
+          isClosable: true,
+          duration: 3000,
+        });
+      })
+      .catch((err) => {
+        toast({
+          title: 'Failed to delete ngo',
+          description: err?.message,
+          status: 'error',
+          position: 'top-right',
+          isClosable: true,
+          duration: 5000,
+        });
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
@@ -139,42 +173,59 @@ export const NgoSettingsWrapper: ReactComponent<Props> = ({
           </ModalBody>
 
           <ModalFooter>
-            <Button
-              variant='ghost'
-              mr={3}
-              onClick={closeModal}
-              disabled={loading}
-            >
-              Cancel
-            </Button>
-            <Button
-              colorScheme='teal'
-              isLoading={loading}
-              disabled={
-                name === ngo.name &&
-                description === ngo.description &&
-                profile === ngo.profile &&
-                banner === ngo.banner
-              }
-              onClick={() => {
-                handleUpdateNgo()
-                  .catch((err) => {
-                    toast({
-                      title: 'Failed to update ngo data',
-                      description: err?.message,
-                      status: 'error',
-                      position: 'top-right',
-                      isClosable: true,
-                      duration: 5000,
-                    });
-                  })
-                  .finally(() => {
-                    setLoading(false);
-                  });
-              }}
-            >
-              Save
-            </Button>
+            <Flex alignItems='center' w='full' justifyContent='space-between'>
+              <PermissionWrapper
+                description="Are you sure you want to delete this ngo, this action can't be undone."
+                placeholder='Delete NGO'
+                onClick={handleDeleteNgo}
+              >
+                <Button
+                  colorScheme='red'
+                  disabled={loading}
+                  isLoading={loading}
+                >
+                  Delete ngo
+                </Button>
+              </PermissionWrapper>
+              <Flex alignItems='center'>
+                <Button
+                  variant='ghost'
+                  mr={3}
+                  onClick={closeModal}
+                  disabled={loading}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  colorScheme='teal'
+                  isLoading={loading}
+                  disabled={
+                    name === ngo.name &&
+                    description === ngo.description &&
+                    profile === ngo.profile &&
+                    banner === ngo.banner
+                  }
+                  onClick={() => {
+                    handleUpdateNgo()
+                      .catch((err) => {
+                        toast({
+                          title: 'Failed to update ngo data',
+                          description: err?.message,
+                          status: 'error',
+                          position: 'top-right',
+                          isClosable: true,
+                          duration: 5000,
+                        });
+                      })
+                      .finally(() => {
+                        setLoading(false);
+                      });
+                  }}
+                >
+                  Save
+                </Button>
+              </Flex>
+            </Flex>
           </ModalFooter>
         </ModalContent>
       </Modal>
