@@ -37,3 +37,11 @@ export const UPDATE_NGO = gql`
     }
   }
 `;
+
+export const DELETE_NGO = gql`
+  mutation ($ngoId: String) {
+    deleteNgo(ngoId: $ngoId) {
+      id
+    }
+  }
+`;
