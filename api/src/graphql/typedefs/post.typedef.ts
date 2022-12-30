@@ -3,7 +3,7 @@ import { GraphQLNgoType } from './ngo.typedef';
 
 export const GraphQLPostType: GraphQLObjectType<any, any> =
   new GraphQLObjectType({
-    name: 'User',
+    name: 'Post',
     fields: () => ({
       id: { type: GraphQLID },
       text: { type: GraphQLString },
