@@ -21,6 +21,7 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { SetState } from '@/types/react.type';
+import { PermissionWrapper } from '../PermissionWrapper';
 
 interface Props {
   ngoId: string;
@@ -116,9 +117,9 @@ export const NgoOptions: React.FC<Props> = ({
                 </>
               )}
               {isMember ? (
-                <MenuItem
-                  color='red.500'
-                  icon={<BiLogOut className='text-lg' />}
+                <PermissionWrapper
+                  description="Are you sure you wan't to leave this ngo ?"
+                  placeholder='Leave NGO'
                   onClick={() =>
                     ngoHandler(
                       leaveNgo,
@@ -127,8 +128,13 @@ export const NgoOptions: React.FC<Props> = ({
                     )
                   }
                 >
-                  Leave Ngo
-                </MenuItem>
+                  <MenuItem
+                    color='red.500'
+                    icon={<BiLogOut className='text-lg' />}
+                  >
+                    Leave Ngo
+                  </MenuItem>
+                </PermissionWrapper>
               ) : (
                 <MenuItem
                   color='teal.500'
