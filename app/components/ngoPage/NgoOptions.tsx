@@ -10,6 +10,9 @@ import { useMutation } from '@apollo/client';
 import { JOIN_NGO, LEAVE_NGO } from '@/graphql/ngo/ngoUser.mutation';
 import { NgoSettingsWrapper } from './NgoSettingsWrapper';
 import { NgoType } from '@/types/ngo.type';
+import { SetState } from '@/types/react.type';
+import { PermissionWrapper } from '../PermissionWrapper';
+import { CreatePostWrapper } from './CreatePostWrapper';
 import {
   Button,
   Flex,
@@ -20,8 +23,6 @@ import {
   MenuList,
   useToast,
 } from '@chakra-ui/react';
-import { SetState } from '@/types/react.type';
-import { PermissionWrapper } from '../PermissionWrapper';
 
 interface Props {
   ngoId: string;
@@ -106,9 +107,11 @@ export const NgoOptions: React.FC<Props> = ({
             <>
               {isAdmin && (
                 <>
-                  <MenuItem icon={<IoAdd className='text-lg' />}>
-                    Create Post
-                  </MenuItem>
+                  <CreatePostWrapper ngoId={ngo.id}>
+                    <MenuItem icon={<IoAdd className='text-lg' />}>
+                      Create Post
+                    </MenuItem>
+                  </CreatePostWrapper>
                   <NgoSettingsWrapper ngo={ngo} setNgo={setNgo}>
                     <MenuItem icon={<IoSettingsOutline className='text-lg' />}>
                       Ngo Settings
