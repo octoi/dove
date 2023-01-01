@@ -83,8 +83,6 @@ export const CreatePostWrapper: ReactComponent<Props> = ({
           duration: 5000,
         });
       });
-
-    // createPost({ variables: { ngoId, text, media } });
   };
 
   return (
