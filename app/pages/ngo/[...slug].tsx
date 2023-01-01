@@ -7,12 +7,14 @@ import { NgoPageContent } from '@/components/ngoPage';
 import { useEffect, useState } from 'react';
 import { NgoType } from '@/types/ngo.type';
 import { Paths } from '@/utils/paths';
+import { PostPageContent } from '@/components/ngoPage/post/PostPageContent';
 
 interface Props {
   ngoId: string;
+  postId?: number;
 }
 
-const NgoPage: NextPage<Props> = ({ ngoId }) => {
+const NgoPage: NextPage<Props> = ({ ngoId, postId }) => {
   const [ngo, setNgo] = useState<NgoType | null>(null);
 
   const router = useRouter();
@@ -38,7 +40,8 @@ const NgoPage: NextPage<Props> = ({ ngoId }) => {
     >
       {loading && <p>Loading ...</p>}
       {error && <p>{error.message}</p>}
-      {ngo && <NgoPageContent ngo={ngo} setNgo={setNgo} />}
+      {ngo && !postId && <NgoPageContent ngo={ngo} setNgo={setNgo} />}
+      {ngo && postId && <PostPageContent ngo={ngo} postId={postId} />}
     </Layout>
   );
 };
@@ -46,11 +49,15 @@ const NgoPage: NextPage<Props> = ({ ngoId }) => {
 export default NgoPage;
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const ngoId = params?.id;
+  const slug = params?.slug || [];
+
+  const ngoId = slug[0];
+  const postId = slug[1] || null;
 
   return {
     props: {
       ngoId,
+      postId: Number(postId),
     },
   };
 };

@@ -12,7 +12,7 @@ import { NgoSettingsWrapper } from './NgoSettingsWrapper';
 import { NgoType } from '@/types/ngo.type';
 import { SetState } from '@/types/react.type';
 import { PermissionWrapper } from '../PermissionWrapper';
-import { CreatePostWrapper } from './CreatePostWrapper';
+import { CreatePostWrapper } from './post/CreatePostWrapper';
 import {
   Button,
   Flex,

@@ -77,7 +77,11 @@ export const getPost = (postId: number) => {
           _count: true,
           Comment: true,
           Like: true,
-          ngo: true,
+          ngo: {
+            include: {
+              admins: true,
+            },
+          },
         },
       })
       .then(resolve)
