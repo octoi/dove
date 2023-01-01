@@ -7,10 +7,13 @@ import { useRouter } from 'next/router';
 import { Paths } from '@/utils/paths';
 import { UserType } from '@/types/user.type';
 import { userStore } from '@/store/user.store';
-import { BiLike, BiShareAlt } from 'react-icons/bi';
+import { BiCommentDetail, BiLike, BiShareAlt } from 'react-icons/bi';
 import { Container, Flex, Button, useToast } from '@chakra-ui/react';
 import { PostHeader } from './PostHeader';
 import { CREATE_LIKE, DELETE_LIKE } from '@/graphql/like/like.mutation';
+import { CreateCommentWrapper } from './CreateCommentWrapper';
+import { GET_POST_COMMENTS } from '@/graphql/comment/comment.query';
+import { CommentSection } from './CommentSection';
 
 interface Props {
   ngo: NgoType;
@@ -31,6 +34,14 @@ export const PostPageContent: React.FC<Props> = ({ postId, ngo }) => {
   const { loading, error, data } = useQuery(GET_POST, {
     variables: { postId },
   });
+  const {
+    loading: commentsLoading,
+    error: commentsError,
+    data: commentsData,
+    refetch,
+  } = useQuery(GET_POST_COMMENTS, {
+    variables: { postId },
+  });
 
   useEffect(() => {
     if (loading || error) return;
@@ -43,7 +54,7 @@ export const PostPageContent: React.FC<Props> = ({ postId, ngo }) => {
 
       if (user) {
         let admins: UserType[] = data?.getPost?.ngo?.admins || [];
-        admins.filter((admin) => admin.id === user?.id);
+        admins = admins.filter((admin) => admin.id == user?.id);
         setIsAdmin(admins.length !== 0);
 
         // set if user liked the post or not
@@ -130,22 +141,29 @@ export const PostPageContent: React.FC<Props> = ({ postId, ngo }) => {
                 isAdmin={isAdmin}
                 ngo={ngo}
                 post={post}
-                className='flex md:hidden mb-5'
+                className='flex md:hidden'
               />
-              <h2 className='text-2xl font-medium mb-5'>{post.text}</h2>
+              <h2 className='text-2xl font-medium'>{post.text}</h2>
               {post.media && (
-                <img className='w-full  object-cover' src={post.media} />
+                <img className='mt-5 w-full object-cover' src={post.media} />
               )}
             </div>
             <div className='mx-0 md:mx-2' />
-            <div className='w-full md:w-1/2 flex flex-col justify-between'>
+            <div className='mt-5 md:mt-0 w-full md:w-1/2 flex flex-col-reverse md:flex-col justify-between'>
               <PostHeader
                 isAdmin={isAdmin}
                 ngo={ngo}
                 post={post}
                 className='hidden md:flex'
               />
-              <div className='h-full my-2 w-full bg-white'></div>
+              <CommentSection
+                user={user}
+                isAdmin={isAdmin}
+                loading={commentsLoading}
+                error={commentsError}
+                data={commentsData}
+                refetch={refetch}
+              />
               <Flex alignItems='center'>
                 <Button
                   variant={isLiked ? 'solid' : 'outline'}
@@ -170,6 +188,17 @@ export const PostPageContent: React.FC<Props> = ({ postId, ngo }) => {
                   >
                     Share
                   </Button>
+                )}
+                {user && (
+                  <CreateCommentWrapper refetch={refetch} postId={postId}>
+                    <Button
+                      ml={2}
+                      variant='outline'
+                      rightIcon={<BiCommentDetail />}
+                    >
+                      Comment
+                    </Button>
+                  </CreateCommentWrapper>
                 )}
               </Flex>
             </div>

@@ -35,6 +35,9 @@ export const loadPostComments = (postId: number) => {
         include: {
           user: true,
         },
+        orderBy: {
+          createdAt: 'desc',
+        },
       })
       .then(resolve)
       .catch(() => reject('Failed to fetch comments'));

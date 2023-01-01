@@ -36,6 +36,11 @@ const uploadImageToServer = (imageDataURL: string) => {
 
 export const uploadImageHelper = (imageDataURL: string) => {
   return new Promise((resolve, reject) => {
+    if (imageDataURL.trim().length === 0) {
+      resolve(null);
+      return;
+    }
+
     if (isValidURL(imageDataURL)) {
       resolve(imageDataURL);
       return;

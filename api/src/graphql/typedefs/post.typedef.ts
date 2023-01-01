@@ -1,5 +1,6 @@
 import { GraphQLLikeType } from './like.typedef';
 import { GraphQLNgoType } from './ngo.typedef';
+import { GraphQLCommentType } from './comment.typedef';
 import {
   GraphQLID,
   GraphQLInt,
@@ -19,6 +20,7 @@ export const GraphQLPostType: GraphQLObjectType<any, any> =
       ngoId: { type: GraphQLString },
       ngo: { type: GraphQLNgoType },
       Like: { type: new GraphQLList(GraphQLLikeType) },
+      Comment: { type: new GraphQLList(GraphQLCommentType) },
       _count: {
         type: new GraphQLObjectType({
           name: 'Count',
@@ -28,6 +30,5 @@ export const GraphQLPostType: GraphQLObjectType<any, any> =
           }),
         }),
       },
-      // TODO: Comments
     }),
   });
