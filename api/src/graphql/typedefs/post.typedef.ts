@@ -1,5 +1,12 @@
-import { GraphQLID, GraphQLObjectType, GraphQLString } from 'graphql';
+import { GraphQLLikeType } from './like.typedef';
 import { GraphQLNgoType } from './ngo.typedef';
+import {
+  GraphQLID,
+  GraphQLInt,
+  GraphQLList,
+  GraphQLObjectType,
+  GraphQLString,
+} from 'graphql';
 
 export const GraphQLPostType: GraphQLObjectType<any, any> =
   new GraphQLObjectType({
@@ -11,7 +18,16 @@ export const GraphQLPostType: GraphQLObjectType<any, any> =
       createdAt: { type: GraphQLString },
       ngoId: { type: GraphQLString },
       ngo: { type: GraphQLNgoType },
-      // TODO: Likes
+      Like: { type: new GraphQLList(GraphQLLikeType) },
+      _count: {
+        type: new GraphQLObjectType({
+          name: 'Count',
+          fields: () => ({
+            Like: { type: GraphQLInt },
+            Comment: { type: GraphQLInt },
+          }),
+        }),
+      },
       // TODO: Comments
     }),
   });
