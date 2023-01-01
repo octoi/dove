@@ -52,7 +52,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const slug = params?.slug || [];
 
   const ngoId = slug[0];
-  const postId = Number(slug[1]) || undefined;
+  const postId = Number(slug[1]) || null;
 
   return {
     props: {
