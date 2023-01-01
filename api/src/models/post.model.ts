@@ -66,7 +66,7 @@ export const loadUserFeed = (userId: number, page: number) => {
   });
 };
 
-export const getPost = (postId: number) => {
+export const getPost = (postId: number, userId?: number) => {
   return new Promise((resolve, reject) => {
     prismaClient.post
       .findUnique({
@@ -76,7 +76,13 @@ export const getPost = (postId: number) => {
         include: {
           _count: true,
           Comment: true,
-          Like: true,
+          Like: userId
+            ? {
+                where: {
+                  userId,
+                },
+              }
+            : false,
           ngo: {
             include: {
               admins: true,

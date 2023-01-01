@@ -52,7 +52,8 @@ export const EditImageWrapper: ReactComponent<Props> = ({
                 colorScheme='blue'
                 onClick={() => imageInputRef.current.click()}
               >
-                <RiImageEditFill className='mr-1' /> Edit image
+                <RiImageEditFill className='mr-1' /> {image ? 'Edit' : 'Add'}{' '}
+                image
               </Button>
             </div>
 
