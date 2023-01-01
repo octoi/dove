@@ -12,6 +12,13 @@ export const GET_POST = gql`
           id
         }
       }
+      Like {
+        userId
+      }
+      _count {
+        Like
+        Comment
+      }
     }
   }
 `;
