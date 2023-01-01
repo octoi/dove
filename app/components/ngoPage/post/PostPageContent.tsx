@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { NgoType } from '@/types/ngo.type';
 import { PostType } from '@/types/post.type';
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { GET_POST } from '@/graphql/post/post.query';
 import { useRouter } from 'next/router';
 import { Paths } from '@/utils/paths';
@@ -10,6 +10,7 @@ import { userStore } from '@/store/user.store';
 import { BiLike, BiShareAlt } from 'react-icons/bi';
 import { Container, Flex, Button, useToast } from '@chakra-ui/react';
 import { PostHeader } from './PostHeader';
+import { CREATE_LIKE, DELETE_LIKE } from '@/graphql/like/like.mutation';
 
 interface Props {
   ngo: NgoType;
@@ -21,9 +22,12 @@ export const PostPageContent: React.FC<Props> = ({ postId, ngo }) => {
   const toast = useToast();
 
   const [post, setPost] = useState<PostType | null>(null);
+  const [isLiked, setIsLiked] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [user, setUser] = useState<UserType | null>(null);
 
+  const [createLike] = useMutation(CREATE_LIKE);
+  const [deleteLike] = useMutation(DELETE_LIKE);
   const { loading, error, data } = useQuery(GET_POST, {
     variables: { postId },
   });
@@ -41,6 +45,12 @@ export const PostPageContent: React.FC<Props> = ({ postId, ngo }) => {
         let admins: UserType[] = data?.getPost?.ngo?.admins || [];
         admins.filter((admin) => admin.id === user?.id);
         setIsAdmin(admins.length !== 0);
+
+        // set if user liked the post or not
+        let filteredLikes = (data?.getPost.Like || []).filter(
+          (like: any) => like.userId == user?.id
+        );
+        setIsLiked(filteredLikes.length != 0);
       }
 
       return;
@@ -48,6 +58,60 @@ export const PostPageContent: React.FC<Props> = ({ postId, ngo }) => {
 
     router.push(Paths.notFound);
   }, [data]);
+
+  const handleLikePost = () => {
+    if (!post || !user) return;
+
+    if (!isLiked) {
+      createLike({ variables: { postId } })
+        .then(() => {
+          setPost({
+            ...post,
+            Like: [{ userId: user.id || 0 }],
+            _count: {
+              ...post._count,
+              Like: (post._count.Like || 0) + 1,
+            },
+          });
+          setIsLiked(true);
+        })
+        .catch((err) => {
+          setIsLiked(false);
+          toast({
+            title: 'Failed to like post.',
+            description: err?.message,
+            status: 'error',
+            position: 'top-right',
+            isClosable: true,
+            duration: 5000,
+          });
+        });
+    } else {
+      deleteLike({ variables: { postId } })
+        .then(() => {
+          setPost({
+            ...post,
+            Like: [],
+            _count: {
+              ...post._count,
+              Like: (post._count.Like || 0) - 1,
+            },
+          });
+          setIsLiked(false);
+        })
+        .catch((err) => {
+          setIsLiked(true);
+          toast({
+            title: 'Failed to unlike post.',
+            description: err?.message,
+            status: 'error',
+            position: 'top-right',
+            isClosable: true,
+            duration: 5000,
+          });
+        });
+    }
+  };
 
   return (
     <div>
@@ -84,8 +148,13 @@ export const PostPageContent: React.FC<Props> = ({ postId, ngo }) => {
               <div className='h-full my-2 w-full bg-white'></div>
               <Flex alignItems='center'>
                 {user && (
-                  <Button variant='outline' rightIcon={<BiLike />}>
-                    Like
+                  <Button
+                    variant={isLiked ? 'solid' : 'outline'}
+                    colorScheme={isLiked ? 'blue' : undefined}
+                    rightIcon={<BiLike />}
+                    onClick={handleLikePost}
+                  >
+                    Like {post._count.Like || 0}
                   </Button>
                 )}
                 {navigator?.share && (

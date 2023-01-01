@@ -52,12 +52,12 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const slug = params?.slug || [];
 
   const ngoId = slug[0];
-  const postId = Number(slug[1]) || null;
+  const postId = Number(slug[1]) || undefined;
 
   return {
     props: {
       ngoId,
-      postId: postId,
+      postId,
     },
   };
 };
