@@ -147,19 +147,18 @@ export const PostPageContent: React.FC<Props> = ({ postId, ngo }) => {
               />
               <div className='h-full my-2 w-full bg-white'></div>
               <Flex alignItems='center'>
-                {user && (
-                  <Button
-                    variant={isLiked ? 'solid' : 'outline'}
-                    colorScheme={isLiked ? 'blue' : undefined}
-                    rightIcon={<BiLike />}
-                    onClick={handleLikePost}
-                  >
-                    Like {post._count.Like || 0}
-                  </Button>
-                )}
+                <Button
+                  variant={isLiked ? 'solid' : 'outline'}
+                  colorScheme={isLiked ? 'blue' : undefined}
+                  rightIcon={<BiLike />}
+                  onClick={handleLikePost}
+                  disabled={!user}
+                >
+                  Like {post._count.Like || 0}
+                </Button>
                 {navigator?.share && (
                   <Button
-                    ml={user ? 2 : 0}
+                    ml={2}
                     variant='outline'
                     rightIcon={<BiShareAlt />}
                     onClick={() => {
