@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { CREATE_POST } from '@/graphql/post/post.mutation';
 import { ReactComponent } from '@/types/react.type';
-import { EditImageWrapper } from '../EditImageWrapper';
+import { EditImageWrapper } from '../../EditImageWrapper';
 import { uploadImageHelper } from '@/utils/imageUpload';
 import { useRouter } from 'next/router';
 import { Paths } from '@/utils/paths';
@@ -53,7 +53,7 @@ export const CreatePostWrapper: ReactComponent<Props> = ({
         createPost({ variables: { ngoId, text, media: imageURL } })
           .then(({ data }) => {
             let postId = data?.createPost?.id;
-            router.push(`${Paths.ngo}/${ngoId}/post/${postId}`);
+            router.push(`${Paths.ngo}/${ngoId}/${postId}`);
             toast({
               title: 'Created post successfully.',
               status: 'success',
