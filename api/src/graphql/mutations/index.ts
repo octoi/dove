@@ -14,7 +14,7 @@ import {
   RemoveMemberMutation,
   UpdateNgoMutation,
 } from './ngo.mutation';
-import { CreatePostMutation } from './post.mutation';
+import { CreatePostMutation, DeletePostMutation } from './post.mutation';
 
 export const Mutations = new GraphQLObjectType({
   name: 'Mutations',
@@ -34,5 +34,6 @@ export const Mutations = new GraphQLObjectType({
     leaveNgo: LeaveNgoMutation,
     // post operations
     createPost: CreatePostMutation,
+    deletePost: DeletePostMutation,
   }),
 });
