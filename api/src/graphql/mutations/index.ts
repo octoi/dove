@@ -16,6 +16,10 @@ import {
   RemoveMemberMutation,
   UpdateNgoMutation,
 } from './ngo.mutation';
+import {
+  CreateCommentMutation,
+  DeleteCommentMutation,
+} from './comment.mutation';
 
 export const Mutations = new GraphQLObjectType({
   name: 'Mutations',
@@ -39,5 +43,8 @@ export const Mutations = new GraphQLObjectType({
     // like operations
     createLike: CreateLikeMutation,
     deleteLike: DeleteLikeMutation,
+    // comment operations
+    createComment: CreateCommentMutation,
+    deleteComment: DeleteCommentMutation,
   }),
 });
