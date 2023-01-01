@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import moment from 'moment';
-import CopyToClipboard from 'react-copy-to-clipboard';
 import { NgoType } from '@/types/ngo.type';
 import { PostType } from '@/types/post.type';
 import { useQuery } from '@apollo/client';
@@ -9,22 +7,9 @@ import { useRouter } from 'next/router';
 import { Paths } from '@/utils/paths';
 import { UserType } from '@/types/user.type';
 import { userStore } from '@/store/user.store';
-import { SlOptions } from 'react-icons/sl';
-import { VscCopy } from 'react-icons/vsc';
-import { BiLike, BiShareAlt, BiTrash } from 'react-icons/bi';
-import {
-  Avatar,
-  Container,
-  Flex,
-  Text,
-  Button,
-  Menu,
-  MenuButton,
-  IconButton,
-  MenuList,
-  MenuItem,
-  useToast,
-} from '@chakra-ui/react';
+import { BiLike, BiShareAlt } from 'react-icons/bi';
+import { Container, Flex, Button, useToast } from '@chakra-ui/react';
+import { PostHeader } from './PostHeader';
 
 interface Props {
   ngo: NgoType;
@@ -74,6 +59,12 @@ export const PostPageContent: React.FC<Props> = ({ postId, ngo }) => {
         >
           <Flex className='flex-col md:flex-row'>
             <div className='w-full md:w-1/2'>
+              <PostHeader
+                isAdmin={isAdmin}
+                ngo={ngo}
+                post={post}
+                className='flex md:hidden mb-5'
+              />
               <h2 className='text-2xl font-medium mb-5'>{post.text}</h2>
               {post.media && (
                 <img className='w-full  object-cover' src={post.media} />
@@ -81,54 +72,12 @@ export const PostPageContent: React.FC<Props> = ({ postId, ngo }) => {
             </div>
             <div className='mx-0 md:mx-2' />
             <div className='w-full md:w-1/2 flex flex-col justify-between'>
-              <Flex alignItems='center' justifyContent='space-between'>
-                <Flex alignItems='center'>
-                  <Avatar src={ngo.profile} />
-                  <div className='ml-2'>
-                    <Text fontSize='lg' fontWeight='medium'>
-                      {ngo.name}
-                    </Text>
-                    <Text>
-                      {moment(new Date(Number(post.createdAt))).fromNow()}
-                    </Text>
-                  </div>
-                </Flex>
-                <Menu>
-                  <MenuButton>
-                    <IconButton
-                      aria-label='options'
-                      variant='ghost'
-                      icon={<SlOptions />}
-                    />
-                  </MenuButton>
-                  <MenuList>
-                    <CopyToClipboard
-                      text={window.location.href}
-                      onCopy={() => {
-                        toast({
-                          title: 'Copied To Clipboard',
-                          duration: 3000,
-                          isClosable: true,
-                          position: 'top-right',
-                          status: 'success',
-                        });
-                      }}
-                    >
-                      <MenuItem icon={<VscCopy className='text-lg' />}>
-                        Copy post URL
-                      </MenuItem>
-                    </CopyToClipboard>
-                    {isAdmin && (
-                      <MenuItem
-                        color='red.500'
-                        icon={<BiTrash className='text-lg' />}
-                      >
-                        Delete post
-                      </MenuItem>
-                    )}
-                  </MenuList>
-                </Menu>
-              </Flex>
+              <PostHeader
+                isAdmin={isAdmin}
+                ngo={ngo}
+                post={post}
+                className='hidden md:flex'
+              />
               <div className='h-full my-2 w-full bg-white'></div>
               <Flex alignItems='center'>
                 <Button variant='outline' rightIcon={<BiLike />}>
