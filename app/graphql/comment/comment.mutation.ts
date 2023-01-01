@@ -7,3 +7,11 @@ export const CREATE_COMMENT = gql`
     }
   }
 `;
+
+export const DELETE_COMMENT = gql`
+  mutation ($commentId: Int) {
+    deleteComment(commentId: $commentId) {
+      id
+    }
+  }
+`;
