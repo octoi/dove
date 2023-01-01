@@ -9,3 +9,14 @@ export const validateCreatePostArgs = (args: CreatePostArgs) => {
 
   return args;
 };
+
+export const validateDeletePostArgs = (args: {
+  ngoId: string;
+  postId: number;
+}) => {
+  if (!args.ngoId || !args.postId) {
+    throw new GraphQLError(ValidatorMessage);
+  }
+
+  return args;
+};
