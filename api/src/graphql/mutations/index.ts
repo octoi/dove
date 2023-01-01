@@ -1,4 +1,6 @@
 import { GraphQLObjectType } from 'graphql';
+import { CreatePostMutation, DeletePostMutation } from './post.mutation';
+import { CreateLikeMutation, DeleteLikeMutation } from './like.mutation';
 import {
   LoginMutation,
   RegisterMutation,
@@ -14,7 +16,6 @@ import {
   RemoveMemberMutation,
   UpdateNgoMutation,
 } from './ngo.mutation';
-import { CreatePostMutation, DeletePostMutation } from './post.mutation';
 
 export const Mutations = new GraphQLObjectType({
   name: 'Mutations',
@@ -35,5 +36,8 @@ export const Mutations = new GraphQLObjectType({
     // post operations
     createPost: CreatePostMutation,
     deletePost: DeletePostMutation,
+    // like operations
+    createLike: CreateLikeMutation,
+    deleteLike: DeleteLikeMutation,
   }),
 });
