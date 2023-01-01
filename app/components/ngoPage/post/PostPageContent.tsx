@@ -7,10 +7,11 @@ import { useRouter } from 'next/router';
 import { Paths } from '@/utils/paths';
 import { UserType } from '@/types/user.type';
 import { userStore } from '@/store/user.store';
-import { BiLike, BiShareAlt } from 'react-icons/bi';
+import { BiCommentDetail, BiLike, BiShareAlt } from 'react-icons/bi';
 import { Container, Flex, Button, useToast } from '@chakra-ui/react';
 import { PostHeader } from './PostHeader';
 import { CREATE_LIKE, DELETE_LIKE } from '@/graphql/like/like.mutation';
+import { CreateCommentWrapper } from './CreateCommentWrapper';
 
 interface Props {
   ngo: NgoType;
@@ -130,7 +131,7 @@ export const PostPageContent: React.FC<Props> = ({ postId, ngo }) => {
                 isAdmin={isAdmin}
                 ngo={ngo}
                 post={post}
-                className='flex md:hidden mb-5'
+                className='flex md:hidden'
               />
               <h2 className='text-2xl font-medium mb-5'>{post.text}</h2>
               {post.media && (
@@ -145,7 +146,7 @@ export const PostPageContent: React.FC<Props> = ({ postId, ngo }) => {
                 post={post}
                 className='hidden md:flex'
               />
-              <div className='h-full my-2 w-full bg-white'></div>
+              <div className='h-full my-5 w-full bg-white'></div>
               <Flex alignItems='center'>
                 <Button
                   variant={isLiked ? 'solid' : 'outline'}
@@ -170,6 +171,18 @@ export const PostPageContent: React.FC<Props> = ({ postId, ngo }) => {
                   >
                     Share
                   </Button>
+                )}
+                {user && (
+                  <CreateCommentWrapper refetch={() => {}} postId={postId}>
+                    <Button
+                      ml={2}
+                      variant='outline'
+                      rightIcon={<BiCommentDetail />}
+                      onClick={() => {}}
+                    >
+                      Comment
+                    </Button>
+                  </CreateCommentWrapper>
                 )}
               </Flex>
             </div>
