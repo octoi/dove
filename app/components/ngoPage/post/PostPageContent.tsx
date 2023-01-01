@@ -22,6 +22,7 @@ export const PostPageContent: React.FC<Props> = ({ postId, ngo }) => {
 
   const [post, setPost] = useState<PostType | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [user, setUser] = useState<UserType | null>(null);
 
   const { loading, error, data } = useQuery(GET_POST, {
     variables: { postId },
@@ -30,6 +31,8 @@ export const PostPageContent: React.FC<Props> = ({ postId, ngo }) => {
   useEffect(() => {
     if (loading || error) return;
     let user = userStore.getState().user;
+
+    setUser(user);
 
     if (data?.getPost) {
       setPost(data?.getPost);
@@ -80,12 +83,14 @@ export const PostPageContent: React.FC<Props> = ({ postId, ngo }) => {
               />
               <div className='h-full my-2 w-full bg-white'></div>
               <Flex alignItems='center'>
-                <Button variant='outline' rightIcon={<BiLike />}>
-                  Like
-                </Button>
+                {user && (
+                  <Button variant='outline' rightIcon={<BiLike />}>
+                    Like
+                  </Button>
+                )}
                 {navigator?.share && (
                   <Button
-                    ml={2}
+                    ml={user ? 2 : 0}
                     variant='outline'
                     rightIcon={<BiShareAlt />}
                     onClick={() => {
