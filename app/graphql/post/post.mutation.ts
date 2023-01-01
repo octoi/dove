@@ -9,3 +9,11 @@ export const CREATE_POST = gql`
     }
   }
 `;
+
+export const DELETE_POST = gql`
+  mutation ($ngoId: String, $postId: Int) {
+    deletePost(ngoId: $ngoId, postId: $postId) {
+      id
+    }
+  }
+`;
