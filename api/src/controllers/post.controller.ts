@@ -22,8 +22,8 @@ export const createPostController = async (
   });
 };
 
-export const getPostController = async (postId: number) => {
-  return await getPost(postId).catch((err) => {
+export const getPostController = async (postId: number, userId?: number) => {
+  return await getPost(postId, userId).catch((err) => {
     throw new GraphQLError(err);
   });
 };
