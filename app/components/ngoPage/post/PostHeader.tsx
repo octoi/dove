@@ -89,7 +89,7 @@ export const PostHeader: React.FC<Props> = ({
         </MenuButton>
         <MenuList>
           <CopyToClipboard
-            text={window.location.href}
+            text={`${window.location.origin}/${Paths.ngo}/${ngo.id}/${post.id}`}
             onCopy={() => {
               toast({
                 title: 'Copied To Clipboard',

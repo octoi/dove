@@ -22,3 +22,21 @@ export const GET_POST = gql`
     }
   }
 `;
+
+export const LOAD_NGO_POSTS = gql`
+  query ($ngoId: String) {
+    loadNgoPosts(ngoId: $ngoId) {
+      id
+      text
+      media
+      createdAt
+      Like {
+        userId
+      }
+      _count {
+        Like
+        Comment
+      }
+    }
+  }
+`;

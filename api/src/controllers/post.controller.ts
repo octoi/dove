@@ -1,7 +1,12 @@
-import { authenticateNGOAdmin } from '@/models/ngo.model';
-import { createPost, deletePost, getPost } from '@/models/post.model';
-import { CreatePostArgs } from '@/types/post.type';
 import { GraphQLError } from 'graphql';
+import { CreatePostArgs } from '@/types/post.type';
+import { authenticateNGOAdmin } from '@/models/ngo.model';
+import {
+  createPost,
+  deletePost,
+  getPost,
+  loadNGOPosts,
+} from '@/models/post.model';
 
 export const createPostController = async (
   userId: number,
@@ -24,6 +29,15 @@ export const createPostController = async (
 
 export const getPostController = async (postId: number, userId?: number) => {
   return await getPost(postId, userId).catch((err) => {
+    throw new GraphQLError(err);
+  });
+};
+
+export const loadNgoPostsController = async (
+  ngoId: string,
+  userId?: number
+) => {
+  return await loadNGOPosts(ngoId, userId).catch((err) => {
     throw new GraphQLError(err);
   });
 };

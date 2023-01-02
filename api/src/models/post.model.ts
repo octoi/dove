@@ -26,6 +26,34 @@ export const deletePost = (postId: number) => {
   });
 };
 
+// Get posts of a NGO
+export const loadNGOPosts = (ngoId: string, userId?: number) => {
+  return new Promise((resolve, reject) => {
+    prismaClient.post
+      .findMany({
+        where: {
+          ngoId,
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+        include: {
+          _count: true,
+          // selecting like by user
+          Like: userId
+            ? {
+                where: {
+                  userId,
+                },
+              }
+            : false,
+        },
+      })
+      .then(resolve)
+      .catch(() => reject('Failed to load NGO posts'));
+  });
+};
+
 // Get user NGOs and load posts from that NGOs
 export const loadUserFeed = (userId: number, page: number) => {
   return new Promise((resolve, reject) => {
