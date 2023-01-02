@@ -21,6 +21,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { SetState } from '@/types/react.type';
+import { Posts } from './Posts';
 
 interface Props {
   ngo: NgoType;
@@ -79,7 +80,7 @@ export const NgoPageContent: React.FC<Props> = ({ ngo, setNgo }) => {
             </Flex>
             <TabPanels>
               <TabPanel>
-                <p>Posts</p>
+                <Posts ngo={ngo} />
               </TabPanel>
               <TabPanel>
                 {membersLoading && <p>Loading ...</p>}
