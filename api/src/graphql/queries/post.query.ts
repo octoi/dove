@@ -2,7 +2,6 @@ import {
   getPostController,
   loadNgoPostsController,
 } from '@/controllers/post.controller';
-import { ValidatorMessage } from '@/utils/constants';
 import { getUserFromContext } from '@/utils/jwt';
 import { GraphQLError, GraphQLInt, GraphQLList, GraphQLString } from 'graphql';
 import { GraphQLDefaultFieldConfig } from '../typedefs/graphql.typedef';

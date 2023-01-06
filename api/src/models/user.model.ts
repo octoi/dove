@@ -133,3 +133,19 @@ export const getUserNGOs = (userId: number) => {
       .catch(() => reject('Failed to fetch user NGOs'));
   });
 };
+
+export const getUser = (email: string) => {
+  return new Promise((resolve, reject) => {
+    prismaClient.user
+      .findUnique({
+        where: {
+          email,
+        },
+        include: {
+          joinedNGO: true,
+        },
+      })
+      .then(resolve)
+      .catch(reject);
+  });
+};
