@@ -1,4 +1,4 @@
-# dove
+# DOVE 🕊️
 
 A social media for NGOs
 
