@@ -2,4 +2,4 @@
 
 A social media for NGOs
 
-> WIP
+> The project is abandoned
